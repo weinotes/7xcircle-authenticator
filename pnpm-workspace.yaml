@@ -1,2 +1,6 @@
+# pnpm 11 refuses to run dependency build scripts until they are approved here.
+# This was a generated placeholder ("set this to true or false") that nobody
+# filled in, so `pnpm install` exited with ERR_PNPM_IGNORED_BUILDS and every
+# `pnpm build` (which re-runs the deps check) failed before Vite even started.
 allowBuilds:
-  esbuild: set this to true or false
+  esbuild: true
