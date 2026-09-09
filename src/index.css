@@ -1,24 +1,55 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
 
-html, body {
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-/* 防止移动端双击缩放 */
-button, input, textarea {
-  touch-action: manipulation;
-}
+  html,
+  body,
+  #root {
+    background-color: #0f1729;
+  }
 
-/* 自定义滚动条 */
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  html,
+  body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    color: #fff;
+    font-family:
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Roboto,
+      "PingFang SC",
+      "Hiragino Sans GB",
+      "Microsoft YaHei",
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: contain;
+  }
+
+  /* 防止移动端双击缩放 */
+  button,
+  input,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  /* 自定义滚动条 */
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 }

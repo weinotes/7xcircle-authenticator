@@ -90,9 +90,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e]">
+    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-[#1a1a2e] shadow-2xl shadow-black/30">
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 backdrop-blur-sm px-4 pt-4 pb-2">
+      <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-2 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             {BRAND.nameZh}
@@ -126,7 +126,7 @@ export default function App() {
       </div>
 
       {/* 令牌列表 */}
-      <div className="pt-2">
+      <div className="flex-1 pt-2">
         <TokenList
           tokens={tokens}
           searchQuery={searchQuery}
@@ -139,10 +139,10 @@ export default function App() {
       </div>
 
       {/* 底部添加按钮 */}
-      <div className="fixed bottom-6 left-0 right-0 flex justify-center">
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex justify-center pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           onClick={() => setCurrentPage('add')}
-          className="w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-lg shadow-blue-900/50 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+          className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg shadow-blue-900/50 transition-transform hover:scale-105 active:scale-95"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

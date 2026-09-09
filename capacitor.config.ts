@@ -6,6 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   android: {
     allowMixedContent: false,
+    backgroundColor: '#1a1a2e',
   },
   plugins: {
     SplashScreen: {

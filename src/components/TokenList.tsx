@@ -37,7 +37,7 @@ export function TokenList({ tokens, searchQuery, onDelete, onEdit }: TokenListPr
   }
 
   return (
-    <div className="px-4 pb-20">
+    <div className="px-4 pb-28">
       {filtered.map((token) => (
         <TokenCard key={token.id} token={token} onDelete={onDelete} onEdit={onEdit} />
       ))}

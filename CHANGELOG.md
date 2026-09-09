@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] — 2026-09-10
+
+### Changed
+
+- 修复 CSS 层叠问题：全局 reset 原先写在 Tailwind `@layer` 之外，会覆盖所有
+  `padding` / `margin` / 居中工具类，导致各页间距与对齐错乱。
+- 页面统一收窄到移动端安全的 `max-w-md` 内容列，宽屏/平板不再整屏拉伸。
+- 增加 `env(safe-area-inset-*)` 适配与暗色 `color-scheme`，Android 全面屏下
+  顶栏/底部按钮不再被系统栏遮挡，背景也不再露出白边。
+
 ## [1.1.0] — 2026-09-10
 
 ### Changed
@@ -68,4 +78,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   backup, SQLite and localStorage adapters.
 
 [1.1.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.0
+[1.1.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.1
 [1.0.0]: https://github.com/weinotes/7xcircle-authenticator
