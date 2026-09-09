@@ -8,6 +8,7 @@ import {
   isLockConfigured,
   isUnlocked,
   lockApp,
+  requireValidPin,
   unlockWithPin,
   validatePin,
 } from './lock'
@@ -52,6 +53,15 @@ describe('validatePin', () => {
 
   it('accepts a non-trivial numeric PIN', () => {
     expect(validatePin(PIN)).toBeNull()
+  })
+
+  // Regression: the settings page once wrote `validatePin(pin) || 'invalid'`,
+  // which turned the valid `null` result into an error and blocked every
+  // attempt to enable the lock.
+  it('requireValidPin stays silent for a valid PIN and throws for a weak one', () => {
+    expect(() => requireValidPin(PIN)).not.toThrow()
+    expect(() => requireValidPin('1234')).toThrow('至少')
+    expect(() => requireValidPin('111111')).toThrow('重复')
   })
 })
 

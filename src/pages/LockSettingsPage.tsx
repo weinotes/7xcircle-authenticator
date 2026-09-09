@@ -6,7 +6,7 @@ import {
   disableLock,
   enableLock,
   isLockConfigured,
-  validatePin,
+  requireValidPin,
 } from '../core/lock'
 
 interface LockSettingsPageProps {
@@ -47,13 +47,12 @@ export function LockSettingsPage({ onBack, onLockChanged }: LockSettingsPageProp
   }
 
   const handleEnable = () => {
-    const invalid = validatePin(next) || 'PIN 不符合要求'
     if (next !== confirm) {
       setError('两次输入的 PIN 不一致')
       return
     }
     void run(async () => {
-      if (invalid) throw new Error(invalid)
+      requireValidPin(next)
       await enableLock(next)
       // Re-wrap existing rows so nothing stays in plaintext after enabling.
       await db.rewriteAll()
@@ -61,13 +60,12 @@ export function LockSettingsPage({ onBack, onLockChanged }: LockSettingsPageProp
   }
 
   const handleChange = () => {
-    const invalid = validatePin(next)
     if (next !== confirm) {
       setError('两次输入的 PIN 不一致')
       return
     }
     void run(async () => {
-      if (invalid) throw new Error(invalid)
+      requireValidPin(next)
       await changePin(current, next)
       await db.rewriteAll()
     })

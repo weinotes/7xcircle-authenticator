@@ -59,6 +59,16 @@ export function validatePin(pin: string): string | null {
   return null
 }
 
+/**
+ * Throwing variant for callers that just want to gate an action. Exists so call
+ * sites cannot invert the `null` return of `validatePin` — a valid PIN once read
+ * as invalid because a page wrote `validatePin(pin) || 'invalid'`.
+ */
+export function requireValidPin(pin: string): void {
+  const invalid = validatePin(pin)
+  if (invalid) throw new Error(invalid)
+}
+
 export function isLockConfigured(): boolean {
   return !!localStorage.getItem(SALT_KEY) && !!localStorage.getItem(PROBE_KEY)
 }
