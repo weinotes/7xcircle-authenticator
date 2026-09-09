@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">绝招验证器</string>
+    <string name="title_activity_main">绝招验证器</string>
+    <string name="package_name">com.juezhao.auth</string>
+    <string name="custom_url_scheme">com.juezhao.auth</string>
+</resources>
