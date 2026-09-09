@@ -7,12 +7,12 @@
   "author": "Davey Wong <wgwcko@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/7xcircle/authenticator.git"
+    "url": "git+https://github.com/weinotes/7xcircle-authenticator.git"
   },
   "bugs": {
-    "url": "https://github.com/7xcircle/authenticator/issues"
+    "url": "https://github.com/weinotes/7xcircle-authenticator/issues"
   },
-  "homepage": "https://github.com/7xcircle/authenticator#readme",
+  "homepage": "https://github.com/weinotes/7xcircle-authenticator#readme",
   "keywords": ["totp", "hotp", "2fa", "authenticator", "authentication", "security", "capacitor", "react", "7x-circle"],
   "type": "module",
   "scripts": {

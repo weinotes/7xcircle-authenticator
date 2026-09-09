@@ -67,5 +67,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `otpauth://` parsing, QR scanning, per-second refresh, search, edit, JSON
   backup, SQLite and localStorage adapters.
 
-[1.1.0]: https://github.com/7xcircle/authenticator/releases/tag/v1.1.0
-[1.0.0]: https://github.com/7xcircle/authenticator
+[1.1.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.0
+[1.0.0]: https://github.com/weinotes/7xcircle-authenticator

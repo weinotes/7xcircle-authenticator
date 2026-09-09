@@ -18,7 +18,7 @@ asynchronous and best-effort.
 
 ## Where to ask
 
-- Bugs and features: [open an issue](https://github.com/7xcircle/authenticator/issues).
+- Bugs and features: [open an issue](https://github.com/weinotes/7xcircle-authenticator/issues).
 - Security: private report per [SECURITY.md](SECURITY.md), never a public issue.
 - 7X Circle membership questions: **support@7xcircle.com**.
 

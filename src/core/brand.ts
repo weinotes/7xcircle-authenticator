@@ -26,7 +26,7 @@ export const BRAND = {
   /** Club domain root, per 7X Circle Brandbook (finalized 2026-09-08). */
   domain: '7xcircle.com',
   /** Public project site for this app. */
-  homepage: 'https://github.com/7xcircle/authenticator',
+  homepage: 'https://github.com/weinotes/7xcircle-authenticator',
   supportEmail: 'support@7xcircle.com',
   /** Release version — kept in sync with package.json by brand.test.ts. */
   version: '1.1.0',
