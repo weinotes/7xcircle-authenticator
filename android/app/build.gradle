@@ -16,6 +16,13 @@ while (pkgParts.size() < 3) {
     pkgParts << 0
 }
 
+// Release signing is only enabled in CI when the keystore is injected via
+// GitHub Secrets. Local builds without these env vars stay unsigned.
+def releaseSigningEnabled = System.getenv('ANDROID_KEYSTORE_FILE') != null &&
+    System.getenv('ANDROID_KEYSTORE_PASSWORD') != null &&
+    System.getenv('ANDROID_KEY_ALIAS') != null &&
+    System.getenv('ANDROID_KEY_PASSWORD') != null
+
 android {
     namespace = "com.sevencircle.auth"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -32,8 +39,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (releaseSigningEnabled) {
+                storeFile file(System.getenv('ANDROID_KEYSTORE_FILE'))
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
         release {
+            if (releaseSigningEnabled) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -19,7 +19,7 @@ Offline TOTP / HOTP two-factor authenticator for the [7X Circle](https://7xcircl
 | PIN app lock with at-rest encryption | ✅ opt-in |
 | Auto re-lock when backgrounded | ✅ |
 | iOS build | ❌ not configured or tested |
-| Release-signed APK | ❌ no keystore in this repo yet |
+| Release-signed APK | ✅ auto-signed by CI when a `v*` tag is pushed |
 | Biometric unlock | ❌ not implemented |
 
 ## Security model, stated plainly
