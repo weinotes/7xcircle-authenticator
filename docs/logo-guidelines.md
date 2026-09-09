@@ -1,89 +1,45 @@
-# 觉照验证器 - 应用图标说明
+# 7X Circle 验证器 — 标识规范
 
-## 官方 Logo
+> 品牌定稿依据：`7x-membership/docs/7X-CLUB-BRANDBOOK.md`（主域 `7xcircle.com`，2026-09-08 定稿）。
 
-本项目使用 **觉照** 官方 logo，来自 juezhaotrade.com。
+## 主标识
 
-**来源**: https://www.juezhaotrade.com  
-**作者**: Davey Wong (wgwcko@gmail.com)  
-**版权**: Copyright (c) 2026 Davey Wong. All rights reserved.
+数字「7」与字母「X」双字符穿插：7 的斜笔穿过 X 的交叉点。极简几何、单色与渐变两用，
+16px favicon 下仍需可辨。
 
----
+- **母版**：`public/logo-tile.png`（1024×1024）
+- **生成脚本**：`scripts/generate-icons.py`（其余全部尺寸由它派生）
 
-## 图标文件清单
+## 色彩
 
-| 文件名 | 尺寸 | 用途 | 来源文件 |
-|--------|------|------|----------|
-| `icon.png` | 1024x1024 px | 应用图标（iOS/Android） | `juezhao1600px.png` |
-| `adaptive-icon.png` | 1024x1024 px | Android 自适应图标 | `juezhao1600px.png` |
-| `splash.png` | 1242x2436 px | 启动屏幕 | `juezhao1600px.png` |
-| `favicon.png` | 800x800 px | Web favicon | `juezhao.png` |
+| 名称 | Hex | 用法 |
+|---|---|---|
+| Indigo 靛蓝 | `#6366F1` | 渐变起点（左上）、主交互色 |
+| Purple 紫 | `#8B5CF6` | 渐变终点（右下） |
+| Deep Navy 藏青 | `#1E2A5A` | 正式场合单色版 |
+| Dark background | `#09090B` | 图标底色、自适应图标背景色 |
 
----
+单色版本允许纯白 `#FFFFFF`（深底）或纯黑（浅底）。禁止改色相、禁止描边发光、禁止立体浮雕。
 
-## 设计说明
+## 安全边界
 
-### 图标设计
+- 图形只占画布中心约 60%（Android 自适应图标安全区），四周留深色底。
+- 不要把标识拉伸、旋转、倾斜或加阴影。
+- 图标在 iOS / Android 上由系统再遮罩裁形，母版本身保持方形圆角即可。
 
-- **主体**: 觉照 logo（来自官方网站）
-- **风格**: 简洁、专业
-- **配色**: 与官网一致
+## 来源与状态（务必阅读）
 
-### 启动屏幕
+当前母版由 AI 依品牌书 4.1 节生成，**尚未取得设计定稿授权**：
 
-- **背景色**: `#1a1a2e` (深蓝紫色)
-- **Logo**: 居中显示
-- **配色**: 与应用的深色主题一致
+- 形状、配色、留白已按品牌书执行；
+- 但它是程序生成的草稿，不是设计师交付的矢量源文件；
+- 正式发布（应用商店上架、对外物料）前，需要以 `public/logo-tile.png` 为参考重绘
+  一份 SVG/AI 源文件，并把品牌书中的 Logo 章节更新为最终版本。
 
----
+在此之前，本仓库不得声称图标为「官方品牌资产」。
 
-## 使用规范
+## 历史
 
-### ✅ 允许的使用
-
-- 在觉照验证器应用中使用
-- 在官方文档和宣传材料中使用
-- 在应用商店截图中使用
-
-### ❌ 禁止的使用
-
-- 未经授权用于其他应用
-- 修改 logo 设计
-- 移除版权声明
-
----
-
-## 文件历史
-
-- **2026-04-25**: 从 juezhaotrade.com 下载原始 logo
-  - `juezhao1600px.png` (1600x1600 px)
-  - `juezhao.png` (800x800 px)
-  - `juezhao.svg` (矢量格式)
-
-- **2026-06-24**: 配置到 Expo 项目
-  - 创建 `icon.png` (1024x1024)
-  - 创建 `adaptive-icon.png` (1024x1024)
-  - 创建 `splash.png` (1242x2436)
-  - 创建 `favicon.png` (800x800)
-
----
-
-## 商标声明
-
-"觉照"和 "JueZhao" 是 Davey Wong 的商标。
-
-未经授权，不得使用本项目 logo 用于衍生产品或商业目的。
-
----
-
-## 版权声明
-
-Copyright (c) 2026 Davey Wong (wgwcko@gmail.com)
-
-官网: https://www.juezhaotrade.com  
-GitHub: https://github.com/weinotes
-
----
-
-**最后更新**: 2026-06-24  
-**版本**: 1.0
+- **2026-09-10**：随品牌迁移至 7X Circle，弃用旧拼音首字母圆形 monogram（连同
+  `juezhaotrade.com` 来源与商标声明一并移除），改用上述 7X 标识。
+- 旧图标从未随发布版本分发（此前没有任何成功构建的安装包），因此不做兼容保留。

@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.juezhao.auth',
-  appName: '觉照验证器',
+  appId: 'com.sevencircle.auth',
+  appName: '7X Circle 验证器',
   webDir: 'dist',
   android: {
     allowMixedContent: false,

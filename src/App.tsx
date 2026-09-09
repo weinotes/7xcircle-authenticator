@@ -1,9 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppStore } from './store/app-store'
+import { BRAND } from './core/brand'
+import { isUnlocked, lockApp } from './core/lock'
+import { LockScreen } from './components/LockScreen'
 import { TokenList } from './components/TokenList'
 import { AddTokenPage } from './pages/AddTokenPage'
 import { EditTokenPage } from './pages/EditTokenPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { LockSettingsPage } from './pages/LockSettingsPage'
 
 export default function App() {
   const {
@@ -20,9 +24,39 @@ export default function App() {
     setEditingToken,
   } = useAppStore()
 
+  const [locked, setLocked] = useState(() => !isUnlocked())
+
+  // Tokens can only be read once the session key exists, so the load is
+  // gated on `locked` rather than running on first mount.
   useEffect(() => {
+    if (locked) return
     loadTokens()
-  }, [loadTokens])
+  }, [loadTokens, locked])
+
+  // Re-lock as soon as the app leaves the foreground. `visibilitychange`
+  // fires inside the Capacitor WebView, so no extra native plugin is needed.
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState !== 'hidden') return
+      lockApp()
+      setLocked(!isUnlocked())
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [])
+
+  if (locked) {
+    return <LockScreen onUnlocked={() => setLocked(false)} />
+  }
+
+  if (currentPage === 'lock') {
+    return (
+      <LockSettingsPage
+        onBack={() => setCurrentPage('settings')}
+        onLockChanged={loadTokens}
+      />
+    )
+  }
 
   if (currentPage === 'add') {
     return (
@@ -48,7 +82,10 @@ export default function App() {
 
   if (currentPage === 'settings') {
     return (
-      <SettingsPage onBack={() => setCurrentPage('home')} />
+      <SettingsPage
+        onBack={() => setCurrentPage('home')}
+        onOpenLock={() => setCurrentPage('lock')}
+      />
     )
   }
 
@@ -58,7 +95,7 @@ export default function App() {
       <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 backdrop-blur-sm px-4 pt-4 pb-2">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            觉照验证器
+            {BRAND.nameZh}
           </h1>
           <button
             onClick={() => setCurrentPage('settings')}

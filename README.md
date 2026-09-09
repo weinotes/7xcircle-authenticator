@@ -1,99 +1,82 @@
-# Juezhao Auth - 觉照验证器
+# 7X Circle Authenticator
 
-[![Build Status](https://github.com/juezhao/juezhao-auth/actions/workflows/build-apk.yml/badge.svg)](https://github.com/juezhao/juezhao-auth/actions/workflows/build-apk.yml)
+[简体中文](README.zh-CN.md) | English
+
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-Juezhao Auth 是一款基于 React 和 Capacitor 的跨平台 TOTP/HOTP 双因素认证客户端，支持二维码扫描、本地加密存储及实时验证码刷新。
+Offline TOTP / HOTP two-factor authenticator for the [7X Circle](https://7xcircle.com) trading club. React + Capacitor, Android and web, no backend, no telemetry.
 
-## 功能特性
+## What it does
 
-- **TOTP/HOTP 双因素认证**：支持 SHA1/SHA256/SHA512 算法，6/7/8 位验证码
-- **二维码扫描**：集成 Capacitor 条码扫描器，一键添加令牌
-- **URI 解析**：支持标准 `otpauth://` 协议格式
-- **本地加密存储**：使用 SQLite 持久化，数据加密保护
-- **实时刷新**：每秒更新验证码，进度条可视化倒计时
-- **导入/导出**：支持 JSON 格式的数据备份与恢复
-- **搜索过滤**：快速查找令牌
+| Feature | Status |
+|---|---|
+| TOTP (RFC 6238) and HOTP (RFC 4226) | ✅ |
+| SHA1 / SHA256 / SHA512, 6 / 7 / 8 digits, custom period | ✅ |
+| Add by QR scan (`otpauth://`) | ✅ native Android |
+| Add and edit by manual entry | ✅ |
+| Search, one-tap copy, live countdown | ✅ |
+| JSON backup export / import | ✅ password-encrypted |
+| PIN app lock with at-rest encryption | ✅ opt-in |
+| Auto re-lock when backgrounded | ✅ |
+| iOS build | ❌ not configured or tested |
+| Release-signed APK | ❌ no keystore in this repo yet |
+| Biometric unlock | ❌ not implemented |
 
-## 技术栈
+## Security model, stated plainly
 
-- **框架**：React 19 + TypeScript
-- **构建工具**：Vite 8
-- **样式**：TailwindCSS 4
-- **状态管理**：Zustand 5
-- **移动端桥接**：Capacitor 8
-- **数据库**：SQLite (@capacitor-community/sqlite)
-- **OTP 引擎**：otpauth
-- **测试**：Vitest
+- **No network activity.** App code never calls `fetch`, `XMLHttpRequest`, `WebSocket` or `sendBeacon`, and contains no remote endpoint. This is enforced by `src/core/privacy.test.ts`, not just claimed. The `INTERNET` permission stays in the manifest because the Android WebView needs it to serve the bundled assets.
+- **Where secrets live.** SQLite on native (`sevencircle_auth`), `localStorage` on web (`sevencircle_auth_tokens`).
+- **Encryption is opt-in.** With the app lock enabled, the token payload (web) and each `secret` column (native) are sealed with an AES-256-GCM key derived from your PIN via PBKDF2-SHA256 with 600,000 iterations. The derived key is non-extractable and exists only in memory; only the salt and an encrypted probe are persisted.
+- **Without the app lock, secrets are stored in plaintext.** The Settings screen states this. If you only need a code generator on a device you control, that may be fine; if not, enable the lock.
+- **Offline brute-force is not stopped, only slowed.** Anyone who can read the storage file can test PINs offline. 600k PBKDF2 rounds make each guess expensive, which is why the PIN must be at least 6 digits and may not be sequential or repeated.
+- **Android auto-backup is disabled** (`allowBackup="false"`) so a Google Drive backup cannot carry a copy of your keys.
+- **Losing the PIN means losing the data.** There is no recovery path; restore from an encrypted backup instead. Backups are encrypted with a separate password you choose at export time.
 
-## 快速开始
+## Development
 
-### 安装依赖
+Requires Node >= 20 and pnpm 11.
 
 ```bash
 pnpm install
+pnpm dev         # Vite dev server
+pnpm test        # unit tests (vitest)
+pnpm type-check  # tsc -b
+pnpm lint        # oxlint
+pnpm build       # web bundle into dist/
 ```
 
-### 开发模式
-
-```bash
-pnpm dev
-```
-
-### 构建生产版本
+### Android
 
 ```bash
 pnpm build
-```
-
-### 运行测试
-
-```bash
-pnpm test
-```
-
-### Android 构建
-
-```bash
-# 同步 Capacitor
 npx cap sync android
-
-# 构建 APK
-cd android && ./gradlew assembleDebug
+npx cap open android   # or: cd android && ./gradlew assembleDebug
 ```
 
-## 项目结构
+Needs a JDK 21 and an Android SDK with `platforms;android-36`. CI builds the same steps — see `.github/workflows/build-apk.yml`.
+
+## Project layout
 
 ```
 src/
-├── core/              # 核心逻辑
-│   ├── types.ts       # 类型定义
-│   ├── totp.ts        # TOTP/HOTP 生成
-│   └── uri-parser.ts  # URI 解析与生成
-├── db/                # 数据持久化
-│   ├── database.ts    # 数据库抽象层
-│   └── adapters/      # 存储适配器
-├── hooks/             # 自定义 Hooks
-│   └── useTOTP.ts     # 实时 TOTP 计算
-├── store/             # 状态管理
-│   └── app-store.ts   # Zustand Store
-├── components/        # UI 组件
-│   ├── TokenCard.tsx  # 令牌卡片
-│   └── TokenList.tsx  # 令牌列表
-├── pages/             # 页面组件
-│   ├── AddTokenPage.tsx   # 添加令牌页
-│   └── SettingsPage.tsx   # 设置页
-├── App.tsx            # 根组件
-├── main.tsx           # 入口文件
-└── index.css          # 全局样式
+├── core/          # pure logic: OTP, URI parsing, crypto, brand, app lock
+├── db/            # Database facade + SQLite / localStorage adapters
+├── store/         # zustand state
+├── hooks/         # useTOTP (per-second refresh), useBarcodeScanner
+├── components/    # TokenList, TokenCard, LockScreen
+└── pages/         # Add, Edit, Settings, LockSettings
 ```
 
-## 安全说明
+Brand strings, storage key prefixes and the app id all come from
+[`src/core/brand.ts`](src/core/brand.ts). `brand.test.ts` fails the build if a
+legacy identifier returns or if the version drifts from `package.json`.
 
-- 所有令牌数据存储在本地，不会上传到云端
-- 密钥使用 AES-GCM 加密存储
-- 建议定期导出数据进行备份
+## Contributing
 
-## 许可证
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities via [SECURITY.md](SECURITY.md) rather than a public issue.
 
-Apache License 2.0 - 详见 [LICENSE](LICENSE)
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE).
+
+Copyright 2026 Davey Wong / 7X Circle.

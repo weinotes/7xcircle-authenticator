@@ -2,10 +2,21 @@ import { Capacitor } from '@capacitor/core'
 import { CapacitorSQLite } from '@capacitor-community/sqlite'
 import type { Token } from '../../core/types'
 import type { DatabaseAdapter } from './adapter'
+import { BRAND } from '../../core/brand'
+import { decryptWithKey, encryptWithKey } from '../../core/crypto'
+import { LockRequiredError, getSessionKey } from '../../core/lock'
 
-const DB_NAME = 'juezhao_auth'
+const DB_NAME = BRAND.storagePrefix
 const DB_VERSION = 1
 const TABLE_NAME = 'tokens'
+
+/**
+ * Secrets are encrypted per column before they reach SQLite, so the native
+ * database never holds a raw TOTP key even though the connection itself is
+ * not SQLCipher-encrypted. Values are tagged so plaintext rows written before
+ * the lock was enabled stay readable.
+ */
+const ENC_PREFIX = 'enc:v1:'
 
 export class SQLiteAdapter implements DatabaseAdapter {
   private isConnected = false
@@ -54,7 +65,12 @@ export class SQLiteAdapter implements DatabaseAdapter {
       database: DB_NAME,
       statement: `SELECT * FROM ${TABLE_NAME}`,
     })
-    return result.values?.map((row: Record<string, unknown>) => this.rowToToken(row)) || []
+    const rows = result.values ?? []
+    const tokens: Token[] = []
+    for (const row of rows) {
+      tokens.push(await this.rowToToken(row as Record<string, unknown>))
+    }
+    return tokens
   }
 
   async saveTokens(tokens: Token[]): Promise<void> {
@@ -70,16 +86,11 @@ export class SQLiteAdapter implements DatabaseAdapter {
 
   async addToken(token: Token): Promise<void> {
     await this.ensureConnection()
-    await CapacitorSQLite.execute({
-      database: DB_NAME,
-      statements: `
-        INSERT OR REPLACE INTO ${TABLE_NAME} (
-          id, issuer, accountName, secret, algorithm, digits, period, type,
-          counter, icon, syncStatus, createdAt, updatedAt
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
-    })
-    await CapacitorSQLite.query({
+    const stored = await this.sealSecret(token.secret)
+    // `run` is the parameterized write API; the previous implementation also
+    // fired the same statement through `execute` with no bound values, which
+    // inserted an all-NULL row and violated the NOT NULL columns on device.
+    await CapacitorSQLite.run({
       database: DB_NAME,
       statement: `
         INSERT OR REPLACE INTO ${TABLE_NAME} (
@@ -91,7 +102,7 @@ export class SQLiteAdapter implements DatabaseAdapter {
         token.id,
         token.issuer,
         token.accountName,
-        token.secret,
+        stored,
         token.algorithm,
         token.digits,
         token.period,
@@ -121,12 +132,25 @@ export class SQLiteAdapter implements DatabaseAdapter {
     })
   }
 
-  private rowToToken(row: Record<string, unknown>): Token {
+  private async sealSecret(secret: string): Promise<string> {
+    const key = getSessionKey()
+    if (!key) return secret
+    return `${ENC_PREFIX}${await encryptWithKey(secret, key)}`
+  }
+
+  private async openSecret(stored: string): Promise<string> {
+    if (!stored.startsWith(ENC_PREFIX)) return stored
+    const key = getSessionKey()
+    if (!key) throw new LockRequiredError()
+    return decryptWithKey(stored.slice(ENC_PREFIX.length), key)
+  }
+
+  private async rowToToken(row: Record<string, unknown>): Promise<Token> {
     return {
       id: String(row.id),
       issuer: String(row.issuer),
       accountName: String(row.accountName),
-      secret: String(row.secret),
+      secret: await this.openSecret(String(row.secret)),
       algorithm: String(row.algorithm) as Token['algorithm'],
       digits: Number(row.digits) as Token['digits'],
       period: Number(row.period),

@@ -1,32 +1,43 @@
 import { useState } from 'react'
-import { db } from '../db/database'
+import { MIN_BACKUP_PASSWORD_LENGTH, db } from '../db/database'
+import { BRAND } from '../core/brand'
+import { isLockConfigured } from '../core/lock'
 
 interface SettingsPageProps {
   onBack: () => void
+  onOpenLock: () => void
 }
 
-export function SettingsPage({ onBack }: SettingsPageProps) {
+export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
   const [exporting, setExporting] = useState(false)
   const [importing, setImporting] = useState(false)
+  const [exportPassword, setExportPassword] = useState('')
+  const [importPassword, setImportPassword] = useState('')
   const [message, setMessage] = useState('')
+  const lockOn = isLockConfigured()
+
+  const flash = (text: string) => {
+    setMessage(text)
+    setTimeout(() => setMessage(''), 4000)
+  }
 
   const handleExport = async () => {
     try {
       setExporting(true)
-      const data = await db.exportData()
+      const data = await db.exportData(exportPassword)
       const blob = new Blob([data], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `juezhao-auth-backup-${new Date().toISOString().slice(0, 10)}.json`
+      a.download = `${BRAND.slug}-backup-${new Date().toISOString().slice(0, 10)}.json`
       a.click()
       URL.revokeObjectURL(url)
-      setMessage('导出成功')
-    } catch {
-      setMessage('导出失败')
+      setExportPassword('')
+      flash('已导出加密备份文件')
+    } catch (err) {
+      flash((err as Error).message || '导出失败')
     } finally {
       setExporting(false)
-      setTimeout(() => setMessage(''), 3000)
     }
   }
 
@@ -40,18 +51,32 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
       try {
         setImporting(true)
         const text = await file.text()
-        const count = await db.importData(text)
-        setMessage(`导入成功，共 ${count} 条令牌`)
+        const count = await db.importData(text, importPassword)
+        setImportPassword('')
+        flash(`导入成功，共 ${count} 条令牌`)
         setTimeout(() => window.location.reload(), 1500)
-      } catch {
-        setMessage('导入失败，文件格式无效')
+      } catch (err) {
+        flash((err as Error).message || '导入失败，文件格式无效')
       } finally {
         setImporting(false)
-        setTimeout(() => setMessage(''), 3000)
       }
     }
     input.click()
   }
+
+  const passwordField = (
+    value: string,
+    onChange: (v: string) => void,
+  ) => (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      type="password"
+      autoComplete="new-password"
+      placeholder={`备份密码（至少 ${MIN_BACKUP_PASSWORD_LENGTH} 位）`}
+      className="w-full mt-3 bg-[#0f1729] border border-[#2a3b5c] rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500"
+    />
+  )
 
   return (
     <div className="min-h-screen bg-[#1a1a2e] px-4 pt-6 pb-8">
@@ -72,12 +97,29 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
       )}
 
       <div className="space-y-3">
-        {/* 数据导出 */}
+        {/* 应用锁 */}
         <button
-          onClick={handleExport}
-          disabled={exporting}
+          onClick={onOpenLock}
           className="w-full bg-[#16213e] rounded-xl p-4 flex items-center justify-between hover:bg-[#1a2744] transition-colors"
         >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-indigo-900/50 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <div className="text-left">
+              <div className="text-sm font-medium text-white">应用锁</div>
+              <div className="text-xs text-gray-500">
+                {lockOn ? '已开启 · PIN 派生密钥加密存储' : '未开启 · 密钥明文存储在本机'}
+              </div>
+            </div>
+          </div>
+          <span className="text-gray-600">{'>'}</span>
+        </button>
+
+        {/* 数据导出 */}
+        <div className="w-full bg-[#16213e] rounded-xl p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-green-900/50 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,18 +128,21 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
             </div>
             <div className="text-left">
               <div className="text-sm font-medium text-white">导出数据</div>
-              <div className="text-xs text-gray-500">备份所有令牌到 JSON 文件</div>
+              <div className="text-xs text-gray-500">用备份密码加密后导出 JSON</div>
             </div>
           </div>
-          <span className="text-gray-600">{exporting ? '...' : '>'}</span>
-        </button>
+          {passwordField(exportPassword, setExportPassword)}
+          <button
+            onClick={handleExport}
+            disabled={exporting || exportPassword.length < MIN_BACKUP_PASSWORD_LENGTH}
+            className="w-full mt-3 bg-[#1a2744] border border-[#2a3b5c] text-white text-sm font-semibold py-2.5 rounded-lg disabled:opacity-40"
+          >
+            {exporting ? '导出中…' : '导出'}
+          </button>
+        </div>
 
         {/* 数据导入 */}
-        <button
-          onClick={handleImport}
-          disabled={importing}
-          className="w-full bg-[#16213e] rounded-xl p-4 flex items-center justify-between hover:bg-[#1a2744] transition-colors"
-        >
+        <div className="w-full bg-[#16213e] rounded-xl p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-orange-900/50 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,21 +151,28 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
             </div>
             <div className="text-left">
               <div className="text-sm font-medium text-white">导入数据</div>
-              <div className="text-xs text-gray-500">从备份文件恢复令牌</div>
+              <div className="text-xs text-gray-500">从备份文件恢复令牌（会覆盖现有数据）</div>
             </div>
           </div>
-          <span className="text-gray-600">{importing ? '...' : '>'}</span>
-        </button>
+          {passwordField(importPassword, setImportPassword)}
+          <button
+            onClick={handleImport}
+            disabled={importing}
+            className="w-full mt-3 bg-[#1a2744] border border-[#2a3b5c] text-white text-sm font-semibold py-2.5 rounded-lg disabled:opacity-40"
+          >
+            {importing ? '导入中…' : '选择备份文件'}
+          </button>
+        </div>
 
         {/* 关于 */}
         <div className="bg-[#16213e] rounded-xl p-4 mt-6">
           <div className="text-center">
             <div className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              觉照验证器
+              {BRAND.nameZh}
             </div>
-            <div className="text-xs text-gray-500 mt-1">v1.0.0</div>
+            <div className="text-xs text-gray-500 mt-1">v{BRAND.version}</div>
             <div className="text-xs text-gray-600 mt-3">
-              离线 TOTP 双因素验证器
+              离线 TOTP 双因素验证器 · {BRAND.domain}
             </div>
           </div>
         </div>

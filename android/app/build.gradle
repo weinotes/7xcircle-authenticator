@@ -1,14 +1,30 @@
 apply plugin: 'com.android.application'
 
+// Single source of truth for the app version is the root package.json, so the
+// Play Store versionName can never drift from the npm version again.
+def pkgVersion = '1.0.0'
+try {
+    def pkgJson = new groovy.json.JsonSlurper().parse(new File(project.rootDir.parentFile, 'package.json'))
+    if (pkgJson.version) {
+        pkgVersion = pkgJson.version
+    }
+} catch (Exception e) {
+    logger.warn("Could not read package.json version, falling back to ${pkgVersion}")
+}
+def pkgParts = pkgVersion.split('\\.').collect { it.isInteger() ? it.toInteger() : 0 }
+while (pkgParts.size() < 3) {
+    pkgParts << 0
+}
+
 android {
-    namespace = "com.juezhao.auth"
+    namespace = "com.sevencircle.auth"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.juezhao.auth"
+        applicationId "com.sevencircle.auth"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode pkgParts[0] * 10000 + pkgParts[1] * 100 + pkgParts[2]
+        versionName pkgVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

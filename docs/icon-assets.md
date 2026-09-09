@@ -1,58 +1,38 @@
-# 资产文件说明
+# 图标资产说明 / Icon assets
 
-本目录包含应用所需的图像资源。
+本目录只保留**生成产物**与规范文档，不手工编辑 PNG。
 
-## 必需文件
+## 文件清单
 
-- `icon.png` - 应用图标 (1024x1024 px)
-- `splash.png` - 启动屏幕图像 (Recommended: 1242x2436 px)
-- `adaptive-icon.png` - Android 自适应图标 (1024x1024 px, with padding)
-- `favicon.png` - Web favicon (64x64 px)
+| 文件 | 尺寸 | 用途 |
+|---|---|---|
+| `logo-tile.png` | 1024×1024 | 母版方块（深色底 + 7X 标识），其他尺寸的来源 |
+| `icon.png` | 1024×1024 | 应用图标 / `apple-touch-icon` |
+| `adaptive-icon.png` | 1024×1024 | Android 自适应图标前景层（透明底，图形居中 60%） |
+| `favicon.png` | 180×180 | Web favicon |
+| `splash.png` | 1242×2732 | 启动屏 |
 
-## 占位符
+标识规范与授权状态见 [logo-guidelines.md](logo-guidelines.md)。本目录只放图像资产，
+文档一律置于 `docs/`，否则会被 Vite 复制进 `dist/` 并随 APK 分发。
 
-在开发阶段，可以使用在线工具生成简单的占位符图标：
+Android 各密度图标位于 `android/app/src/main/res/mipmap-*/`，由同一脚本生成：
+`ic_launcher.png`（圆角方块）、`ic_launcher_round.png`（圆形）、
+`ic_launcher_foreground.png`（自适应前景层）。自适应图标背景色由
+`res/values/ic_launcher_background.xml` 提供，取值 `#09090B`。
 
-1. 访问 https://placeholder.com
-2. 或使用 Expo 默认图标（删除自定义图标配置）
-
-## 生产环境
-
-发布到应用商店前，必须提供：
-
-1. **高质量图标** - 遵循平台设计指南
-2. **启动屏幕** - 与 app.json 中的 backgroundColor 匹配
-3. **所有尺寸** - 系统会自动生成所需尺寸
-
-## 快速开始
-
-要快速测试，可以：
-
-1. 从 https://expo.dev/static/images/expo-logo.png 下载 Expo Logo
-2. 重命名为 `icon.png` 放到此目录
-3. 暂时注释掉 app.json 中的 icon 配置
-
-或运行：
+## 重新生成
 
 ```bash
-# 使用 Expo 默认图标（推荐用于开发）
-# 只需确保 assets/ 目录存在，不需要实际文件
-# Expo 会使用默认图标
+python3 scripts/generate-icons.py <母版图.png>
 ```
 
-## 图标设计规范
+脚本会裁掉生成图四周的白底与角标水印、按纯色背景内缩 6%、加圆角，再输出上表全部
+尺寸。更换品牌时只需替换母版并重跑该命令，不要逐张改图。
 
-### iOS
-- 格式: PNG
-- 尺寸: 1024x1024 px
-- 无透明度
-- 无圆角（系统会自动添加）
+依赖 Pillow：`pip3 install pillow`。
 
-### Android
-- 格式: PNG
-- 自适应图标: 108x108 dp（前景 72x72 dp）
-- 兼容图标: 512x512 px
+## 不要做的事
 
-### Web
-- 格式: PNG 或 ICO
-- 尺寸: 64x64 px 或更大
+- 不要在本目录新增第三方下载的旧品牌图标。
+- 不要手工调整单张尺寸后提交（会被下次生成覆盖）。
+- 不要把 `adaptive-icon.png` 直接当 `icon.png` 用：前者是透明底前景层。

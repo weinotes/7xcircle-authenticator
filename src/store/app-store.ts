@@ -37,7 +37,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       // 按 issuer 排序
       tokens.sort((a, b) => a.issuer.localeCompare(b.issuer))
       set({ tokens, isLoading: false })
-    } catch (err) {
+    } catch {
       set({ error: '加载令牌失败', isLoading: false })
     }
   },

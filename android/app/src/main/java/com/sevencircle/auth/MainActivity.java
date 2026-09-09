@@ -1,4 +1,4 @@
-package com.juezhao.auth;
+package com.sevencircle.auth;
 
 import com.getcapacitor.BridgeActivity;
 
