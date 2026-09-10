@@ -6,6 +6,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 
+## [1.4.0] — 2026-09-10
+
+### Added
+
+- 应用内新增「隐私政策 / 用户协议 / 开源许可」页面（设置页可进入），
+  满足国内应用市场对隐私政策可访问性与开源许可展示的要求。
+- 新增 `PRIVACY.md`、`TERMS.md`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、
+  `DCO.md` 与 `.mailmap`，补齐开源合规、第三方许可与版权归属材料。
+- 新增 `docs/china-android-store-checklist.md`（国内各安卓市场上架清单，
+  含包名、versionCode、签名证书指纹、64 位与权限核对结果）与
+  `docs/software-copyright.md`（软著申请材料说明）。
+- 新增 `scripts/generate-copyright-source.py`：按软著要求生成
+  前 30 页 + 后 30 页、每页 50 行的源代码文档。
+- `brand.appRecordNumber`：取得 APP 备案号后填入即可在设置页展示。
+
 ## [1.3.0] — 2026-09-10
 
 ### Added
@@ -158,4 +173,5 @@ Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 [1.2.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.1
 [1.2.2]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.2
 [1.3.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.3.0
+[1.4.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.4.0
 [1.0.0]: https://github.com/weinotes/7xcircle-authenticator

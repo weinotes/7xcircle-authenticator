@@ -19,6 +19,7 @@ import { AddTokenPage } from './pages/AddTokenPage'
 import { EditTokenPage } from './pages/EditTokenPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { LockSettingsPage } from './pages/LockSettingsPage'
+import { LegalPage } from './pages/LegalPage'
 
 export default function App() {
   const {
@@ -107,8 +108,13 @@ export default function App() {
       <SettingsPage
         onBack={() => setCurrentPage('home')}
         onOpenLock={() => setCurrentPage('lock')}
+        onOpenLegal={() => setCurrentPage('legal')}
       />
     )
+  }
+
+  if (currentPage === 'legal') {
+    return <LegalPage onBack={() => setCurrentPage('settings')} />
   }
 
   const advanceHotp = (token: Token) => {

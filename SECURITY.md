@@ -47,6 +47,7 @@ a public issue.
 
 | Version | Supported |
 |---|---|
-| 1.2.x | ✅ |
+| 1.3.x | ✅ |
+| 1.2.x | ⚠️ security fixes only |
 | 1.1.x | ⚠️ security fixes only |
 | < 1.1 | ❌ end of life |

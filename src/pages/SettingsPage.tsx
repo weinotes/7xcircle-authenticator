@@ -15,9 +15,10 @@ import { clearAutoLockSuppression, isLockConfigured, suppressAutoLock } from '..
 interface SettingsPageProps {
   onBack: () => void
   onOpenLock: () => void
+  onOpenLegal: () => void
 }
 
-export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
+export function SettingsPage({ onBack, onOpenLock, onOpenLegal }: SettingsPageProps) {
   const [exporting, setExporting] = useState(false)
   const [importing, setImporting] = useState(false)
   const [exportPassword, setExportPassword] = useState('')
@@ -197,6 +198,16 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
             </div>
           </div>
 
+          <button
+            onClick={onOpenLegal}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-[#2a3b5c] bg-[#1a2744] py-2.5 text-sm font-semibold text-white transition-colors hover:border-indigo-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            隐私政策 / 用户协议 / 开源许可
+          </button>
+
           <a
             href={BRAND.releasesUrl}
             target="_blank"
@@ -214,6 +225,12 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
 
           <div className="mt-4 border-t border-[#23324f] pt-3 text-center text-[11px] leading-relaxed text-gray-600">
             © 2026 Davey Wong / 7X Circle · Apache-2.0 开源许可
+            {BRAND.appRecordNumber && (
+              <>
+                <br />
+                备案号：{BRAND.appRecordNumber}
+              </>
+            )}
           </div>
         </div>
       </div>

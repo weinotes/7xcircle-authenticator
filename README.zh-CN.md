@@ -86,6 +86,13 @@ src/
 
 见 [CONTRIBUTING.md](CONTRIBUTING.md)。发现安全漏洞请依 [SECURITY.md](SECURITY.md) 私报，不要开公开 issue。
 
+## 合规与版权
+
+- 隐私政策：[PRIVACY.md](PRIVACY.md)；用户协议：[TERMS.md](TERMS.md)
+- 开源许可与第三方组件：[LICENSE](LICENSE)、[NOTICE](NOTICE)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+- 国内安卓应用市场上架清单：[docs/china-android-store-checklist.md](docs/china-android-store-checklist.md)
+- 软件著作权（软著）申请与源代码文档生成：[docs/software-copyright.md](docs/software-copyright.md)
+
 ## 许可证
 
 Apache-2.0，详见 [LICENSE](LICENSE)。

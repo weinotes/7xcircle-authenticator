@@ -87,6 +87,13 @@ legacy identifier returns or if the version drifts from `package.json`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities via [SECURITY.md](SECURITY.md) rather than a public issue.
 
+## Compliance and licensing
+
+- Privacy policy: [PRIVACY.md](PRIVACY.md); terms: [TERMS.md](TERMS.md)
+- Open-source licenses: [LICENSE](LICENSE), [NOTICE](NOTICE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+- China Android store checklist: [docs/china-android-store-checklist.md](docs/china-android-store-checklist.md)
+- Software copyright (软著) guide: [docs/software-copyright.md](docs/software-copyright.md)
+
 ## License
 
 Apache-2.0 — see [LICENSE](LICENSE).

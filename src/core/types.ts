@@ -34,4 +34,4 @@ export interface TokenInput {
   counter?: number
 }
 
-export type Page = 'home' | 'add' | 'edit' | 'settings' | 'lock'
+export type Page = 'home' | 'add' | 'edit' | 'settings' | 'lock' | 'legal'
