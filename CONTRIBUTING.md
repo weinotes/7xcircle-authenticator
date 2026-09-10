@@ -69,6 +69,21 @@ Pushing a `v*` tag makes CI export `ANDROID_KEYSTORE_FILE` plus the three other
 variables, so the published `*-release.apk` is signed with the project key. The
 debug APK is debug-signed on every build.
 
+### Publishing to Gitee (China mirror)
+
+When the `GITEE_TOKEN` repository secret is present, pushing a `v*` tag also:
+
+1. pushes the tag and `main` to `gitee.com/weinotes/7xcircle-authenticator`;
+2. creates the matching Gitee Release (skipped if it already exists);
+3. uploads the signed `app-release.apk` as a Gitee Release attachment using
+   [`scripts/publish-gitee.mjs`](scripts/publish-gitee.mjs).
+
+Gitee serves the attachment from a domestic CDN, so users in mainland China can
+download it much faster than from GitHub Releases. The token is stored only as a
+GitHub Actions secret. If it is ever exposed, revoke it in Gitee → 设置 →
+私人令牌 and set a new `GITEE_TOKEN` secret; nothing in the repository contains
+the token.
+
 A fork without those secrets still builds — its release APK is simply unsigned.
 To sign your own, create a keystore and set the four variables:
 
