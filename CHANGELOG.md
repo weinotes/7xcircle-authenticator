@@ -6,6 +6,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 
+## [1.2.2] — 2026-09-10
+
+### Fixed
+
+- **Android 上开启应用锁报 “Query: Must provide an Array of Strings”**：
+  `@capacitor-community/sqlite` 的 Android `query()` 强制要求 `values` 字段，
+  而 `getAllTokens()` 没传，导致开启应用锁时 `rewriteAll()` 失败。现在显式传
+  `values: []`，锁可以正常开启并完成加密。
+- 受旧版本影响的设备升级后，下次解锁会自动重新加密仍为明文的令牌，
+  无需手动关闭再开启应用锁。
+- `rewriteAll()` 改为逐条 `updateToken()`，不再“先 DELETE 全表再逐条插入”，
+  避免中途失败清空令牌。
+
 ## [1.2.1] — 2026-09-10
 
 ### Fixed
@@ -124,4 +137,5 @@ Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 [1.1.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.1
 [1.2.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.0
 [1.2.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.1
+[1.2.2]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.2
 [1.0.0]: https://github.com/weinotes/7xcircle-authenticator

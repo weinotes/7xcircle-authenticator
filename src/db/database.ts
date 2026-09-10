@@ -62,7 +62,11 @@ export class Database {
    */
   async rewriteAll(): Promise<void> {
     const tokens = await this.getAllTokens()
-    await this.saveTokens(tokens)
+    // 逐条用 INSERT OR REPLACE 重写，避免 saveTokens() 的
+    // "先 DELETE 再逐条 INSERT" 在中途失败时清空整张表。
+    for (const token of tokens) {
+      await this.adapter.updateToken(token.id, token)
+    }
   }
 
   /**

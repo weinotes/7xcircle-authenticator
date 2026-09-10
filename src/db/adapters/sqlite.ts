@@ -73,6 +73,9 @@ export class SQLiteAdapter implements DatabaseAdapter {
     const result = await CapacitorSQLite.query({
       database: DB_NAME,
       statement: `SELECT * FROM ${TABLE_NAME}`,
+      // Android 插件对 query() 强制要求 values 字段；不传会直接报
+      // "Query: Must provide an Array of Strings"。
+      values: [],
     })
     const rows = result.values ?? []
     const tokens: Token[] = []

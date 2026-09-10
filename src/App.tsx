@@ -10,7 +10,8 @@
 import { useEffect, useState } from 'react'
 import { useAppStore } from './store/app-store'
 import { BRAND } from './core/brand'
-import { isUnlocked, lockApp } from './core/lock'
+import { isLockConfigured, isUnlocked, lockApp } from './core/lock'
+import { db } from './db/database'
 import { LockScreen } from './components/LockScreen'
 import { TokenList } from './components/TokenList'
 import { AddTokenPage } from './pages/AddTokenPage'
@@ -39,7 +40,14 @@ export default function App() {
   // gated on `locked` rather than running on first mount.
   useEffect(() => {
     if (locked) return
-    loadTokens()
+    void loadTokens().then(() => {
+      // 修复 1.2.1 的问题：旧版本启用应用锁时 rewriteAll() 会报错，
+      // 导致令牌仍是明文。解锁后自动补一次加密，无需用户重开关应用锁。
+      if (!isLockConfigured()) return
+      void db.rewriteAll().catch((err) => {
+        console.warn('Failed to re-seal tokens after unlock', err)
+      })
+    })
   }, [loadTokens, locked])
 
   // Re-lock as soon as the app leaves the foreground. `visibilitychange`
