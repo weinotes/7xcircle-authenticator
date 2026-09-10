@@ -12,6 +12,11 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 0,
     },
+    // Android 全面屏：使用 CSS 安全区变量，并让状态栏/导航栏使用浅色图标。
+    SystemBars: {
+      style: 'DARK',
+      insetsHandling: 'css',
+    },
   },
 }
 

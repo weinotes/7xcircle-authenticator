@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { useTOTP } from '../hooks/useTOTP'
 import type { Token } from '../core/types'
 
@@ -7,12 +8,49 @@ interface TokenCardProps {
   onEdit: (token: Token) => void
 }
 
+async function writeClipboard(text: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text)
+    return
+  }
+
+  // Capacitor WebView 上 navigator.clipboard 可能不可用，退回到旧接口。
+  const textarea = document.createElement('textarea')
+  textarea.value = text
+  textarea.style.position = 'fixed'
+  textarea.style.opacity = '0'
+  document.body.appendChild(textarea)
+  textarea.select()
+  const ok = document.execCommand('copy')
+  document.body.removeChild(textarea)
+  if (!ok) throw new Error('copy failed')
+}
+
 export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
   const { otp, remaining, expiring } = useTOTP(token)
   const progress = (remaining / token.period) * 100
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
+  const feedbackTimer = useRef<number | undefined>(undefined)
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(otp)
+  useEffect(() => {
+    return () => {
+      if (feedbackTimer.current !== undefined) window.clearTimeout(feedbackTimer.current)
+    }
+  }, [])
+
+  const showCopyFeedback = (state: 'copied' | 'failed') => {
+    setCopyState(state)
+    if (feedbackTimer.current !== undefined) window.clearTimeout(feedbackTimer.current)
+    feedbackTimer.current = window.setTimeout(() => setCopyState('idle'), 1500)
+  }
+
+  const handleCopy = async () => {
+    try {
+      await writeClipboard(otp)
+      showCopyFeedback('copied')
+    } catch {
+      showCopyFeedback('failed')
+    }
   }
 
   // 将 OTP 分成两组，方便阅读
@@ -69,6 +107,7 @@ export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
         <button
           onClick={handleCopy}
           className="flex items-center gap-2 group"
+          aria-label="复制验证码"
         >
           <span
             className={`text-3xl font-mono font-bold tracking-wider transition-colors ${
@@ -79,13 +118,19 @@ export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
           </span>
         </button>
         <div className="text-right">
-          <span
-            className={`text-xs font-mono ${
-              expiring ? 'text-red-400' : 'text-gray-500'
-            }`}
-          >
-            {remaining}s
-          </span>
+          {copyState === 'copied' ? (
+            <span className="text-xs font-medium text-green-400">已复制</span>
+          ) : copyState === 'failed' ? (
+            <span className="text-xs font-medium text-amber-400">复制失败</span>
+          ) : (
+            <span
+              className={`text-xs font-mono ${
+                expiring ? 'text-red-400' : 'text-gray-500'
+              }`}
+            >
+              {remaining}s
+            </span>
+          )}
         </div>
       </div>
     </div>

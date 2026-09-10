@@ -3,6 +3,9 @@
 @layer base {
   :root {
     color-scheme: dark;
+    /* Capacitor 在 Android 上注入 --safe-area-*，浏览器上回退到 env()。 */
+    --app-safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+    --app-safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   }
 
   * {

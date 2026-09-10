@@ -1,4 +1,5 @@
 import type { TokenInput } from './types'
+import { parseMigrationURI } from './migration'
 
 /**
  * 解析 otpauth:// URI
@@ -84,4 +85,15 @@ export function generateOTPAuthURI(input: TokenInput): string {
   }
 
   return `otpauth://${input.type || 'totp'}/${label}?${params.toString()}`
+}
+
+/**
+ * 解析单个令牌 URI，或 Google Authenticator 的多令牌迁移二维码。
+ */
+export function parseAccountURI(uri: string): TokenInput[] {
+  const trimmed = uri.trim()
+  if (/^otpauth-migration:\/\//i.test(trimmed)) {
+    return parseMigrationURI(trimmed)
+  }
+  return [parseOTPAuthURI(trimmed)]
 }

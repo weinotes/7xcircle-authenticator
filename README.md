@@ -14,6 +14,8 @@ Offline TOTP / HOTP two-factor authenticator for the [7X Circle](https://7xcircl
 | SHA1 / SHA256 / SHA512, 6 / 7 / 8 digits, custom period | ✅ |
 | Add by QR scan (`otpauth://`) | ✅ native Android |
 | Add and edit by manual entry | ✅ |
+| Import Google Authenticator transfer QR (`otpauth-migration://`) | ✅ multi-account |
+| Tap-to-copy with visible feedback | ✅ |
 | Search, one-tap copy, live countdown | ✅ |
 | JSON backup export / import | ✅ password-encrypted |
 | PIN app lock with at-rest encryption | ✅ opt-in |

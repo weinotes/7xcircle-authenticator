@@ -79,7 +79,7 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
   )
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-md bg-[#1a1a2e] px-4 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]">
+    <div className="mx-auto min-h-screen w-full max-w-md bg-[#1a1a2e] px-4 pt-[max(1.5rem,var(--app-safe-top))] pb-[max(2rem,var(--app-safe-bottom))]">
       {/* 头部 */}
       <div className="flex items-center mb-6">
         <button onClick={onBack} className="text-gray-400 hover:text-white mr-3">

@@ -92,7 +92,7 @@ export default function App() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-[#1a1a2e] shadow-2xl shadow-black/30">
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-2 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 px-4 pt-[max(1rem,var(--app-safe-top))] pb-2 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             {BRAND.nameZh}
@@ -139,7 +139,7 @@ export default function App() {
       </div>
 
       {/* 底部添加按钮 */}
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex justify-center pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex justify-center pb-[max(1.5rem,var(--app-safe-bottom))]">
         <button
           onClick={() => setCurrentPage('add')}
           className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg shadow-blue-900/50 transition-transform hover:scale-105 active:scale-95"

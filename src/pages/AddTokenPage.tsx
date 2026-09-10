@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { TokenInput } from '../core/types'
-import { parseOTPAuthURI } from '../core/uri-parser'
+import { parseAccountURI } from '../core/uri-parser'
 import { isValidSecret } from '../core/totp'
 import { useBarcodeScanner } from '../hooks/useBarcodeScanner'
 
@@ -19,15 +19,22 @@ export function AddTokenPage({ onAdd, onBack }: AddTokenPageProps) {
   const [submitting, setSubmitting] = useState(false)
   const { scan, isScanning } = useBarcodeScanner()
 
+  const submitAccountURI = async (value: string) => {
+    setSubmitting(true)
+    const inputs = parseAccountURI(value)
+    for (const input of inputs) {
+      await onAdd(input)
+    }
+    onBack()
+  }
+
   const handleScan = async () => {
     try {
+      setError('')
       const result = await scan()
       setUri(result.content)
-      if (result.content.startsWith('otpauth://')) {
-        const input = parseOTPAuthURI(result.content)
-        setSubmitting(true)
-        await onAdd(input)
-        onBack()
+      if (result.content.startsWith('otpauth://') || result.content.startsWith('otpauth-migration://')) {
+        await submitAccountURI(result.content)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : '扫描失败')
@@ -39,10 +46,7 @@ export function AddTokenPage({ onAdd, onBack }: AddTokenPageProps) {
   const handleURISubmit = async () => {
     try {
       setError('')
-      const input = parseOTPAuthURI(uri.trim())
-      setSubmitting(true)
-      await onAdd(input)
-      onBack()
+      await submitAccountURI(uri.trim())
     } catch (err) {
       setError(err instanceof Error ? err.message : '解析 URI 失败')
     } finally {
@@ -85,7 +89,7 @@ export function AddTokenPage({ onAdd, onBack }: AddTokenPageProps) {
   }
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-md bg-[#1a1a2e] px-4 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]">
+    <div className="mx-auto min-h-screen w-full max-w-md bg-[#1a1a2e] px-4 pt-[max(1.5rem,var(--app-safe-top))] pb-[max(2rem,var(--app-safe-bottom))]">
       {/* 头部 */}
       <div className="flex items-center mb-6">
         <button onClick={onBack} className="text-gray-400 hover:text-white mr-3">
@@ -126,7 +130,7 @@ export function AddTokenPage({ onAdd, onBack }: AddTokenPageProps) {
       {mode === 'uri' ? (
         <div>
           <p className="text-gray-400 text-sm mb-4">
-            粘贴 otpauth:// 格式的 URI，或扫描二维码获取
+            粘贴 otpauth:// 或 Google Authenticator 迁移二维码内容，也可以直接扫描二维码
           </p>
           <button
             onClick={handleScan}

@@ -4,6 +4,23 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-09-10
+
+### Added
+
+- 支持导入 Google Authenticator 的“导出账户”二维码
+  （`otpauth-migration://`），一次可带多个账号，覆盖 SHA1/SHA256/SHA512、
+  6/8 位、TOTP/HOTP counter；遇到不支持的 MD5 会明确报错而不是生成错误验证码。
+- 点击验证码复制后显示「已复制 / 复制失败」反馈；Capacitor WebView 不支持
+  `navigator.clipboard` 时自动回退到 `execCommand('copy')`。
+
+### Fixed
+
+- Android 全面屏适配：使用 Capacitor 注入的 `--safe-area-inset-*`，顶栏和
+  底部添加按钮不再被状态栏/手势导航遮挡。
+- Android 主题改为深色 NoActionBar 窗口，状态栏与导航栏使用浅色图标，
+  避免深色界面出现亮色系统栏或看不清图标。
+
 ## [1.1.1] — 2026-09-10
 
 ### Changed
@@ -79,4 +96,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [1.1.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.0
 [1.1.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.1
+[1.2.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.0
 [1.0.0]: https://github.com/weinotes/7xcircle-authenticator

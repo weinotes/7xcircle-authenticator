@@ -75,7 +75,7 @@ export function EditTokenPage({ token, onUpdate, onBack }: EditTokenPageProps) {
   }
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-md bg-[#1a1a2e] px-4 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]">
+    <div className="mx-auto min-h-screen w-full max-w-md bg-[#1a1a2e] px-4 pt-[max(1.5rem,var(--app-safe-top))] pb-[max(2rem,var(--app-safe-bottom))]">
       <div className="flex items-center mb-6">
         <button onClick={onBack} className="text-gray-400 hover:text-white mr-3">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
