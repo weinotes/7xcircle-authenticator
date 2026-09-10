@@ -41,8 +41,6 @@ export const BRAND = {
   supportEmail: 'support@7xcircle.com',
   /** Release version — kept in sync with package.json by brand.test.ts. */
   version: '1.4.0',
-  /** APP 备案号；取得后填入，例如「粤ICP备2026xxxxxx号-1A」。 */
-  appRecordNumber: '',
   /** Prefix for every localStorage / SQLite key. */
   storagePrefix: 'sevencircle_auth',
 } as const

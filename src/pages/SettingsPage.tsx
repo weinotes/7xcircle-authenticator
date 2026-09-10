@@ -225,12 +225,6 @@ export function SettingsPage({ onBack, onOpenLock, onOpenLegal }: SettingsPagePr
 
           <div className="mt-4 border-t border-[#23324f] pt-3 text-center text-[11px] leading-relaxed text-gray-600">
             © 2026 Davey Wong / 7X Circle · Apache-2.0 开源许可
-            {BRAND.appRecordNumber && (
-              <>
-                <br />
-                备案号：{BRAND.appRecordNumber}
-              </>
-            )}
           </div>
         </div>
       </div>

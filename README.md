@@ -91,8 +91,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities via [SECURITY.md]
 
 - Privacy policy: [PRIVACY.md](PRIVACY.md); terms: [TERMS.md](TERMS.md)
 - Open-source licenses: [LICENSE](LICENSE), [NOTICE](NOTICE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
-- China Android store checklist: [docs/china-android-store-checklist.md](docs/china-android-store-checklist.md)
-- Software copyright (软著) guide: [docs/software-copyright.md](docs/software-copyright.md)
 
 ## License
 

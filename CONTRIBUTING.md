@@ -104,5 +104,3 @@ keytool -genkeypair -v -keystore release.jks -alias 7xcircle -keyalg RSA \
 - 许可证、第三方组件声明：[`LICENSE`](LICENSE)、[`NOTICE`](NOTICE)、
   [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
 - 隐私政策与用户协议：[`PRIVACY.md`](PRIVACY.md)、[`TERMS.md`](TERMS.md)
-- 国内应用市场上架材料：[`docs/china-android-store-checklist.md`](docs/china-android-store-checklist.md)
-- 软著申请与源代码文档生成：[`docs/software-copyright.md`](docs/software-copyright.md)

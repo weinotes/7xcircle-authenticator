@@ -6,6 +6,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 
+## [Unreleased]
+
+### Removed
+
+- 移除知识产权与应用商店材料：`docs/software-copyright.md`、
+  `docs/china-android-store-checklist.md`、`scripts/generate-copyright-source.py`。
+  这些内容涉及软著、备案、商标与签名指纹，不再对外公开展示。
+- 移除应用内的 APP 备案号字段（`BRAND.appRecordNumber`）。
+
+### Notes
+
+- 公开仓库仅保留开源相关文档：LICENSE、NOTICE、THIRD_PARTY_NOTICES、DCO、
+  CONTRIBUTING、SECURITY、CHANGELOG，以及面向用户的应用内隐私政策与用户协议。
+- 仓库与提交历史中不包含任何 API 令牌；Gitee 发布所用的 `GITEE_TOKEN`
+  仅保存在 GitHub Actions 加密 Secret 中。
+
 ## [1.4.0] — 2026-09-10
 
 ### Added

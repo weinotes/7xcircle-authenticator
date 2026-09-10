@@ -90,8 +90,6 @@ src/
 
 - 隐私政策：[PRIVACY.md](PRIVACY.md)；用户协议：[TERMS.md](TERMS.md)
 - 开源许可与第三方组件：[LICENSE](LICENSE)、[NOTICE](NOTICE)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
-- 国内安卓应用市场上架清单：[docs/china-android-store-checklist.md](docs/china-android-store-checklist.md)
-- 软件著作权（软著）申请与源代码文档生成：[docs/software-copyright.md](docs/software-copyright.md)
 
 ## 许可证
 
