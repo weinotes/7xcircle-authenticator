@@ -10,10 +10,7 @@ Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 
 ### Removed
 
-- 移除知识产权与应用商店材料：`docs/software-copyright.md`、
-  `docs/china-android-store-checklist.md`、`scripts/generate-copyright-source.py`。
-  这些内容涉及软著、备案、商标与签名指纹，不再对外公开展示。
-- 移除应用内的 APP 备案号字段（`BRAND.appRecordNumber`）。
+- 移除与开源无关的私有材料与应用商店专用字段，公开仓库只保留开源文档。
 
 ### Notes
 
@@ -27,15 +24,9 @@ Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 ### Added
 
 - 应用内新增「隐私政策 / 用户协议 / 开源许可」页面（设置页可进入），
-  满足国内应用市场对隐私政策可访问性与开源许可展示的要求。
+  离线即可查看用户协议、隐私政策与第三方开源许可。
 - 新增 `PRIVACY.md`、`TERMS.md`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、
   `DCO.md` 与 `.mailmap`，补齐开源合规、第三方许可与版权归属材料。
-- 新增 `docs/china-android-store-checklist.md`（国内各安卓市场上架清单，
-  含包名、versionCode、签名证书指纹、64 位与权限核对结果）与
-  `docs/software-copyright.md`（软著申请材料说明）。
-- 新增 `scripts/generate-copyright-source.py`：按软著要求生成
-  前 30 页 + 后 30 页、每页 50 行的源代码文档。
-- `brand.appRecordNumber`：取得 APP 备案号后填入即可在设置页展示。
 
 ## [1.3.0] — 2026-09-10
 
