@@ -20,6 +20,7 @@ const HINT = `PIN 为 ${MIN_PIN_LENGTH}-32 位数字，不能是连续或重复�
 export function LockSettingsPage({ onBack, onLockChanged }: LockSettingsPageProps) {
   const [configured] = useState(isLockConfigured())
   const [current, setCurrent] = useState('')
+  const [disableCurrent, setDisableCurrent] = useState('')
   const [next, setNext] = useState('')
   const [confirm, setConfirm] = useState('')
   const [busy, setBusy] = useState(false)
@@ -27,6 +28,7 @@ export function LockSettingsPage({ onBack, onLockChanged }: LockSettingsPageProp
 
   const reset = () => {
     setCurrent('')
+    setDisableCurrent('')
     setNext('')
     setConfirm('')
   }
@@ -76,7 +78,7 @@ export function LockSettingsPage({ onBack, onLockChanged }: LockSettingsPageProp
       // Read while still unlocked, then drop the key, then persist plaintext.
       // Calling rewriteAll() after disableLock() would throw LockRequiredError.
       const tokens = await db.getAllTokens()
-      await disableLock(current)
+      await disableLock(disableCurrent)
       await db.saveTokens(tokens)
     })
   }
@@ -149,10 +151,10 @@ export function LockSettingsPage({ onBack, onLockChanged }: LockSettingsPageProp
           <div className="bg-[#16213e] rounded-xl p-4">
             <div className="text-sm font-medium text-white mb-1">关闭应用锁</div>
             <p className="text-xs text-gray-500 mb-3">关闭后密钥将以明文存储在本机。</p>
-            {field('当前 PIN', current, setCurrent, '••••••')}
+            {field('当前 PIN', disableCurrent, setDisableCurrent, '••••••')}
             <button
               onClick={handleDisable}
-              disabled={busy || !current}
+              disabled={busy || !disableCurrent}
               className="w-full bg-[#1a2744] border border-[#2a3b5c] text-gray-300 font-semibold py-3 rounded-xl disabled:opacity-40"
             >
               关闭应用锁

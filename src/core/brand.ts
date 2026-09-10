@@ -27,9 +27,11 @@ export const BRAND = {
   domain: '7xcircle.com',
   /** Public project site for this app. */
   homepage: 'https://github.com/weinotes/7xcircle-authenticator',
+  /** Release channel: signed APKs are published here by CI on v* tags. */
+  releasesUrl: 'https://github.com/weinotes/7xcircle-authenticator/releases',
   supportEmail: 'support@7xcircle.com',
   /** Release version — kept in sync with package.json by brand.test.ts. */
-  version: '1.2.0',
+  version: '1.2.1',
   /** Prefix for every localStorage / SQLite key. */
   storagePrefix: 'sevencircle_auth',
 } as const

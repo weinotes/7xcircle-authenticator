@@ -175,6 +175,25 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
               离线 TOTP 双因素验证器 · {BRAND.domain}
             </div>
           </div>
+
+          <a
+            href={BRAND.releasesUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-[#2a3b5c] bg-[#1a2744] py-2.5 text-sm font-semibold text-white transition-colors hover:border-indigo-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            检查更新 / 下载新版本
+          </a>
+          <p className="mt-2 text-center text-[11px] text-gray-600">
+            最新正式签名 APK 发布在 GitHub Releases
+          </p>
+
+          <div className="mt-4 border-t border-[#23324f] pt-3 text-center text-[11px] leading-relaxed text-gray-600">
+            © 2026 Davey Wong / 7X Circle · Apache-2.0 开源许可
+          </div>
         </div>
       </div>
     </div>

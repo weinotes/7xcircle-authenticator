@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { BRAND } from '../core/brand'
-import { InvalidPinError, cooldownRemainingMs, unlockWithPin } from '../core/lock'
+import { InvalidPinError, cooldownRemainingMs, remainingAttempts, unlockWithPin } from '../core/lock'
 
 interface LockScreenProps {
   onUnlocked: () => void
@@ -34,7 +34,12 @@ export function LockScreen({ onUnlocked }: LockScreenProps) {
       setPin('')
       onUnlocked()
     } catch (err) {
-      setError(err instanceof InvalidPinError ? 'PIN 不正确' : (err as Error).message)
+      if (err instanceof InvalidPinError) {
+        const left = remainingAttempts()
+        setError(left > 0 ? `PIN 不正确，还可尝试 ${left} 次` : 'PIN 不正确')
+      } else {
+        setError((err as Error).message)
+      }
       setPin('')
       setCooldown(cooldownRemainingMs())
     } finally {

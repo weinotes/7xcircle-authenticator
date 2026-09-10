@@ -125,7 +125,7 @@ export class SQLiteAdapter implements DatabaseAdapter {
 
   async deleteToken(id: string): Promise<void> {
     await this.ensureConnection()
-    await CapacitorSQLite.query({
+    await CapacitorSQLite.run({
       database: DB_NAME,
       statement: `DELETE FROM ${TABLE_NAME} WHERE id = ?`,
       values: [id],

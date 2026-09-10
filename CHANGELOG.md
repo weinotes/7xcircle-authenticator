@@ -4,6 +4,22 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] — 2026-09-10
+
+### Fixed
+
+- 应用锁：连续第 5 次输错 PIN 立即进入冷却（此前第 6 次才触发），
+  解锁页会显示剩余尝试次数；锁设置页「修改 PIN」与「关闭应用锁」不再共用
+  同一个「当前 PIN」输入框，避免输入互相串改。
+- Android 原生 SQLite 删除令牌改用参数化的 `run()`，此前用 `query()` 执行
+  `DELETE` 可能静默失败。
+
+### Added
+
+- 设置页增加「检查更新 / 下载新版本」入口和版权信息
+  （© 2026 Davey Wong / 7X Circle · Apache-2.0）。
+- 首页标题下移并增大与状态栏/列表的间距。
+
 ## [1.2.0] — 2026-09-10
 
 ### Added
@@ -97,4 +113,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 [1.1.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.0
 [1.1.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.1.1
 [1.2.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.0
+[1.2.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.1
 [1.0.0]: https://github.com/weinotes/7xcircle-authenticator

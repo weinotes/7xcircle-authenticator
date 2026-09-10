@@ -92,8 +92,8 @@ export default function App() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-[#1a1a2e] shadow-2xl shadow-black/30">
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 px-4 pt-[max(1rem,var(--app-safe-top))] pb-2 backdrop-blur-sm">
-        <div className="flex items-center justify-between mb-3">
+      <div className="sticky top-0 z-10 bg-[#1a1a2e]/95 px-4 pt-[max(1.5rem,calc(var(--app-safe-top)+0.75rem))] pb-3 backdrop-blur-sm">
+        <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             {BRAND.nameZh}
           </h1>

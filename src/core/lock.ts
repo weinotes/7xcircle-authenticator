@@ -93,6 +93,18 @@ export function cooldownRemainingMs(now: number = Date.now()): number {
   }
 }
 
+/** Free attempts left before the next unlock failure starts a cooldown. */
+export function remainingAttempts(): number {
+  const raw = localStorage.getItem(ATTEMPTS_KEY)
+  if (!raw) return MAX_FREE_ATTEMPTS
+  try {
+    const count = (JSON.parse(raw) as { count?: number }).count ?? 0
+    return Math.max(0, MAX_FREE_ATTEMPTS - count)
+  } catch {
+    return MAX_FREE_ATTEMPTS
+  }
+}
+
 function registerFailure(now: number = Date.now()): void {
   const raw = localStorage.getItem(ATTEMPTS_KEY)
   let count = 1
@@ -103,7 +115,11 @@ function registerFailure(now: number = Date.now()): void {
       count = 1
     }
   }
-  const until = count > MAX_FREE_ATTEMPTS ? now + COOLDOWN_MS * (count - MAX_FREE_ATTEMPTS) : 0
+  // The 5th consecutive failure starts the first cooldown; later failures
+  // extend it linearly (capped at 6 minutes) instead of allowing silently
+  // unlimited attempts.
+  const over = count - MAX_FREE_ATTEMPTS
+  const until = over >= 0 ? now + COOLDOWN_MS * Math.min(over + 1, 12) : 0
   localStorage.setItem(ATTEMPTS_KEY, JSON.stringify({ count, until }))
 }
 

@@ -8,6 +8,7 @@ import {
   isLockConfigured,
   isUnlocked,
   lockApp,
+  remainingAttempts,
   requireValidPin,
   unlockWithPin,
   validatePin,
@@ -98,12 +99,14 @@ describe('app lock lifecycle', () => {
   it('applies a cooldown after repeated failures', async () => {
     await enableLock(PIN)
     lockApp()
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       await unlockWithPin(OTHER_PIN).catch(() => undefined)
     }
     expect(cooldownRemainingMs()).toBe(0)
+    expect(remainingAttempts()).toBe(1)
     await unlockWithPin(OTHER_PIN).catch(() => undefined)
     expect(cooldownRemainingMs()).toBeGreaterThan(0)
+    expect(remainingAttempts()).toBe(0)
   })
 
   it('re-derives a working key after the PIN changes', async () => {
