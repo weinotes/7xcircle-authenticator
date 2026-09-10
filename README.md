@@ -24,6 +24,16 @@ Offline TOTP / HOTP two-factor authenticator for the [7X Circle](https://7xcircl
 | Release-signed APK | ✅ auto-signed by CI when a `v*` tag is pushed |
 | Biometric unlock | ❌ not implemented |
 
+## Compatibility
+
+| Target | Support |
+|---|---|
+| Android version | 8.0+ (API 26, required by the barcode-scanning plugin) |
+| Android 15/16 edge-to-edge | ✅ safe-area and dark system bars |
+| Legacy WebView | ✅ colour/gradient fallbacks plus an in-app update notice |
+| Web browsers | ✅ current Chrome / Edge / Safari |
+| iOS | ❌ not configured or tested |
+
 ## Security model, stated plainly
 
 - **No network activity.** App code never calls `fetch`, `XMLHttpRequest`, `WebSocket` or `sendBeacon`, and contains no remote endpoint. This is enforced by `src/core/privacy.test.ts`, not just claimed. The `INTERNET` permission stays in the manifest because the Android WebView needs it to serve the bundled assets.

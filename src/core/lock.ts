@@ -42,6 +42,24 @@ const COOLDOWN_MS = 30000
 /** The derived key for this session only. Never written to any storage. */
 let sessionKey: CryptoKey | null = null
 
+/**
+ * 某些操作（扫码相机、系统文件选择器）会让 WebView 变 hidden。
+ * 这段时间内不能触发自动上锁，否则用户返回后会被锁在页面外/写入失败。
+ */
+let autoLockSuppressedUntil = 0
+
+export function suppressAutoLock(durationMs: number = 60_000): void {
+  autoLockSuppressedUntil = Date.now() + durationMs
+}
+
+export function clearAutoLockSuppression(): void {
+  autoLockSuppressedUntil = 0
+}
+
+export function isAutoLockSuppressed(): boolean {
+  return Date.now() < autoLockSuppressedUntil
+}
+
 export class InvalidPinError extends Error {
   constructor() {
     super('Invalid PIN')

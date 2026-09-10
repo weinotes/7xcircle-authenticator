@@ -24,6 +24,16 @@
 | 正式签名 APK | ✅ CI 打 `v*` tag 时自动签名并发布 |
 | 生物识别解锁 | ❌ 未实现 |
 
+## 兼容性
+
+| 项目 | 支持情况 |
+|---|---|
+| Android 版本 | 8.0+（API 26，扫码插件的最低要求） |
+| Android 15/16 全面屏 | ✅ 安全区 + 深色系统栏适配 |
+| 旧款 WebView | ✅ 颜色/渐变回退，并在应用内提示更新 Android System WebView |
+| Web 浏览器 | ✅ 现代浏览器（Chrome/Edge/Safari 最新版） |
+| iOS | ❌ 未配置、未验证 |
+
 ## 安全模型（如实说明）
 
 - **不发起任何网络请求。** 业务代码不含 `fetch`、`XMLHttpRequest`、`WebSocket`、`sendBeacon`，也没有任何远程地址；该结论由 `src/core/privacy.test.ts` 断言，而不只是写在文档里。清单中保留 `INTERNET` 权限，是因为 Android WebView 需要它加载本地打包资源。

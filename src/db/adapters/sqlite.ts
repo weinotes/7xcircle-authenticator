@@ -87,13 +87,37 @@ export class SQLiteAdapter implements DatabaseAdapter {
 
   async saveTokens(tokens: Token[]): Promise<void> {
     await this.ensureConnection()
-    await CapacitorSQLite.execute({
-      database: DB_NAME,
-      statements: `DELETE FROM ${TABLE_NAME}`,
-    })
+    // 整批替换必须放在一个事务里：旧实现先 DELETE 再逐条 INSERT，
+    // 中途失败会留下空表或半张表。
+    const set: { statement: string; values: unknown[] }[] = [
+      { statement: `DELETE FROM ${TABLE_NAME}`, values: [] },
+    ]
     for (const token of tokens) {
-      await this.addToken(token)
+      set.push({
+        statement: `
+          INSERT OR REPLACE INTO ${TABLE_NAME} (
+            id, issuer, accountName, secret, algorithm, digits, period, type,
+            counter, icon, syncStatus, createdAt, updatedAt
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        values: [
+          token.id,
+          token.issuer,
+          token.accountName,
+          await this.sealSecret(token.secret),
+          token.algorithm,
+          token.digits,
+          token.period,
+          token.type,
+          token.counter || null,
+          token.icon || null,
+          token.syncStatus,
+          token.createdAt,
+          token.updatedAt,
+        ],
+      })
     }
+    await CapacitorSQLite.executeSet({ database: DB_NAME, set, transaction: true })
   }
 
   async addToken(token: Token): Promise<void> {

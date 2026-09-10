@@ -11,14 +11,17 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import {
   InvalidPinError,
   changePin,
+  clearAutoLockSuppression,
   cooldownRemainingMs,
   disableLock,
   enableLock,
   isLockConfigured,
+  isAutoLockSuppressed,
   isUnlocked,
   lockApp,
   remainingAttempts,
   requireValidPin,
+  suppressAutoLock,
   unlockWithPin,
   validatePin,
 } from './lock'
@@ -130,6 +133,14 @@ describe('app lock lifecycle', () => {
   it('refuses to enable twice', async () => {
     await enableLock(PIN)
     await expect(enableLock(OTHER_PIN)).rejects.toThrow('already enabled')
+  })
+
+  it('suspends auto-lock only during camera / file-picker flows', () => {
+    expect(isAutoLockSuppressed()).toBe(false)
+    suppressAutoLock(60_000)
+    expect(isAutoLockSuppressed()).toBe(true)
+    clearAutoLockSuppression()
+    expect(isAutoLockSuppressed()).toBe(false)
   })
 })
 

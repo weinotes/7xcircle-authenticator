@@ -40,7 +40,7 @@ export const BRAND = {
   releasesUrl: 'https://github.com/weinotes/7xcircle-authenticator/releases',
   supportEmail: 'support@7xcircle.com',
   /** Release version — kept in sync with package.json by brand.test.ts. */
-  version: '1.2.2',
+  version: '1.3.0',
   /** Prefix for every localStorage / SQLite key. */
   storagePrefix: 'sevencircle_auth',
 } as const

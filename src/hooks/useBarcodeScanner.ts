@@ -10,6 +10,7 @@
 import { useState, useCallback } from 'react'
 import { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } from '@capacitor/barcode-scanner'
 import { Capacitor } from '@capacitor/core'
+import { clearAutoLockSuppression, suppressAutoLock } from '../core/lock'
 
 interface ScanResult {
   content: string
@@ -28,6 +29,8 @@ export function useBarcodeScanner() {
     try {
       setIsScanning(true)
       setError(null)
+      // 相机是原生 Activity，会让 WebView 触发 visibilitychange。
+      suppressAutoLock()
 
       const result = await CapacitorBarcodeScanner.scanBarcode({
         hint: CapacitorBarcodeScannerTypeHint.QR_CODE,
@@ -46,6 +49,7 @@ export function useBarcodeScanner() {
       setError(message)
       throw new Error(message)
     } finally {
+      clearAutoLockSuppression()
       setIsScanning(false)
     }
   }, [])

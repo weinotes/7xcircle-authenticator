@@ -14,6 +14,7 @@ import type { Token } from '../core/types'
 interface TokenCardProps {
   token: Token
   onDelete: (id: string) => void
+  onAdvance: (token: Token) => void
   onEdit: (token: Token) => void
 }
 
@@ -35,9 +36,10 @@ async function writeClipboard(text: string): Promise<void> {
   if (!ok) throw new Error('copy failed')
 }
 
-export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
+export function TokenCard({ token, onDelete, onAdvance, onEdit }: TokenCardProps) {
   const { otp, remaining, expiring } = useTOTP(token)
   const progress = (remaining / token.period) * 100
+  const isHotp = token.type === 'hotp'
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const feedbackTimer = useRef<number | undefined>(undefined)
 
@@ -71,14 +73,16 @@ export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
 
   return (
     <div className="bg-[#16213e] rounded-2xl p-4 mb-3 relative overflow-hidden">
-      {/* 进度条背景 */}
-      <div
-        className="absolute bottom-0 left-0 h-1 transition-all duration-1000 ease-linear"
-        style={{
-          width: `${progress}%`,
-          backgroundColor: expiring ? '#ef4444' : '#3b82f6',
-        }}
-      />
+      {/* 进度条背景（HOTP 没有时间窗口，不显示倒计时） */}
+      {!isHotp && (
+        <div
+          className="absolute bottom-0 left-0 h-1 transition-all duration-1000 ease-linear"
+          style={{
+            width: `${progress}%`,
+            backgroundColor: expiring ? '#ef4444' : '#3b82f6',
+          }}
+        />
+      )}
 
       {/* 头部：服务名 + 操作 */}
       <div className="flex items-center justify-between mb-2">
@@ -101,8 +105,13 @@ export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
             </svg>
           </button>
           <button
-            onClick={() => onDelete(token.id)}
+            onClick={() => {
+              if (window.confirm(`确定删除「${token.issuer}」的令牌吗？此操作不可恢复。`)) {
+                onDelete(token.id)
+              }
+            }}
             className="text-gray-600 hover:text-red-400 transition-colors p-1"
+            aria-label="删除令牌"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -131,6 +140,13 @@ export function TokenCard({ token, onDelete, onEdit }: TokenCardProps) {
             <span className="text-xs font-medium text-green-400">已复制</span>
           ) : copyState === 'failed' ? (
             <span className="text-xs font-medium text-amber-400">复制失败</span>
+          ) : isHotp ? (
+            <button
+              onClick={() => onAdvance(token)}
+              className="rounded-lg border border-[#2a3b5c] bg-[#1a2744] px-2.5 py-1 text-xs font-medium text-gray-300"
+            >
+              下一组 · {token.counter ?? 0}
+            </button>
           ) : (
             <span
               className={`text-xs font-mono ${

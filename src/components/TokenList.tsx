@@ -14,10 +14,11 @@ interface TokenListProps {
   tokens: Token[]
   searchQuery: string
   onDelete: (id: string) => void
+  onAdvance: (token: Token) => void
   onEdit: (token: Token) => void
 }
 
-export function TokenList({ tokens, searchQuery, onDelete, onEdit }: TokenListProps) {
+export function TokenList({ tokens, searchQuery, onDelete, onAdvance, onEdit }: TokenListProps) {
   const filtered = tokens.filter((token) => {
     if (!searchQuery) return true
     const q = searchQuery.toLowerCase()
@@ -48,7 +49,13 @@ export function TokenList({ tokens, searchQuery, onDelete, onEdit }: TokenListPr
   return (
     <div className="px-4 pb-28">
       {filtered.map((token) => (
-        <TokenCard key={token.id} token={token} onDelete={onDelete} onEdit={onEdit} />
+        <TokenCard
+          key={token.id}
+          token={token}
+          onDelete={onDelete}
+          onAdvance={onAdvance}
+          onEdit={onEdit}
+        />
       ))}
     </div>
   )

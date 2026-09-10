@@ -10,7 +10,7 @@
 import { useState } from 'react'
 import { MIN_BACKUP_PASSWORD_LENGTH, db } from '../db/database'
 import { BRAND } from '../core/brand'
-import { isLockConfigured } from '../core/lock'
+import { clearAutoLockSuppression, isLockConfigured, suppressAutoLock } from '../core/lock'
 
 interface SettingsPageProps {
   onBack: () => void
@@ -39,8 +39,10 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
       const a = document.createElement('a')
       a.href = url
       a.download = `${BRAND.slug}-backup-${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(a)
       a.click()
-      URL.revokeObjectURL(url)
+      a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 0)
       setExportPassword('')
       flash('已导出加密备份文件')
     } catch (err) {
@@ -54,9 +56,17 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = '.json'
+    document.body.appendChild(input)
+    // 系统文件选择器会让 WebView 变成 hidden；这段时间不要自动上锁，
+    // 否则用户选完文件回来会落到锁屏，导入也会因密钥丢失而失败。
+    suppressAutoLock()
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0]
-      if (!file) return
+      if (!file) {
+        clearAutoLockSuppression()
+        input.remove()
+        return
+      }
       try {
         setImporting(true)
         const text = await file.text()
@@ -68,6 +78,8 @@ export function SettingsPage({ onBack, onOpenLock }: SettingsPageProps) {
         flash((err as Error).message || '导入失败，文件格式无效')
       } finally {
         setImporting(false)
+        clearAutoLockSuppression()
+        input.remove()
       }
     }
     input.click()

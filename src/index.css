@@ -65,3 +65,59 @@
     height: 0;
   }
 }
+
+/*
+ * 老款 Android WebView（Chrome < 111）兼容层。
+ * Tailwind v4 的调色板用 oklch()，渐变用 `in oklab`，老 WebView 不认时
+ * 颜色会被丢弃，渐变文字甚至会变成透明；这里给出等价的十六进制回退。
+ */
+@supports not (color: oklch(0% 0 0)) {
+  :root {
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-red-400: #f87171;
+    --color-red-800: #991b1b;
+    --color-red-900: #7f1d1d;
+    --color-amber-400: #fbbf24;
+    --color-orange-400: #fb923c;
+    --color-orange-900: #7c2d12;
+    --color-green-400: #4ade80;
+    --color-green-900: #14532d;
+    --color-blue-400: #60a5fa;
+    --color-blue-500: #3b82f6;
+    --color-blue-600: #2563eb;
+    --color-blue-700: #1d4ed8;
+    --color-blue-800: #1e40af;
+    --color-blue-900: #1e3a8a;
+    --color-indigo-400: #818cf8;
+    --color-indigo-500: #6366f1;
+    --color-indigo-900: #312e81;
+    --color-purple-500: #a855f7;
+    --color-purple-600: #9333ea;
+  }
+}
+
+@supports not (background-image: linear-gradient(to right in oklab, red, blue)) {
+  .bg-gradient-to-r {
+    background-image: none !important;
+    background-color: #4f46e5 !important;
+  }
+
+  .bg-gradient-to-br {
+    background-image: none !important;
+    background-color: #6366f1 !important;
+  }
+
+  /* bg-clip-text + text-transparent 在没有可用渐变时会直接看不见。 */
+  .bg-clip-text.text-transparent {
+    color: #818cf8 !important;
+    -webkit-text-fill-color: #818cf8 !important;
+  }
+}

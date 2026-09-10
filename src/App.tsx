@@ -10,8 +10,9 @@
 import { useEffect, useState } from 'react'
 import { useAppStore } from './store/app-store'
 import { BRAND } from './core/brand'
-import { isLockConfigured, isUnlocked, lockApp } from './core/lock'
+import { isAutoLockSuppressed, isLockConfigured, isUnlocked, lockApp } from './core/lock'
 import { db } from './db/database'
+import type { Token } from './core/types'
 import { LockScreen } from './components/LockScreen'
 import { TokenList } from './components/TokenList'
 import { AddTokenPage } from './pages/AddTokenPage'
@@ -35,6 +36,9 @@ export default function App() {
   } = useAppStore()
 
   const [locked, setLocked] = useState(() => !isUnlocked())
+  const [legacyWebView] = useState(
+    () => typeof CSS !== 'undefined' && !CSS.supports('color', 'oklch(0% 0 0)'),
+  )
 
   // Tokens can only be read once the session key exists, so the load is
   // gated on `locked` rather than running on first mount.
@@ -55,6 +59,7 @@ export default function App() {
   useEffect(() => {
     const handleVisibility = () => {
       if (document.visibilityState !== 'hidden') return
+      if (isAutoLockSuppressed()) return
       lockApp()
       setLocked(!isUnlocked())
     }
@@ -106,6 +111,14 @@ export default function App() {
     )
   }
 
+  const advanceHotp = (token: Token) => {
+    void updateToken(token.id, {
+      ...token,
+      type: 'hotp',
+      counter: (token.counter ?? 0) + 1,
+    })
+  }
+
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-[#1a1a2e] shadow-2xl shadow-black/30">
       {/* 顶部导航 */}
@@ -142,12 +155,19 @@ export default function App() {
         )}
       </div>
 
+      {legacyWebView && (
+        <div className="mx-4 mt-3 rounded-xl border border-amber-700/60 bg-amber-900/20 px-3 py-2 text-xs leading-relaxed text-amber-300">
+          系统 WebView 版本较旧，部分颜色可能显示异常，请在应用商店更新 Android System WebView。
+        </div>
+      )}
+
       {/* 令牌列表 */}
       <div className="flex-1 pt-2">
         <TokenList
           tokens={tokens}
           searchQuery={searchQuery}
           onDelete={deleteToken}
+          onAdvance={advanceHotp}
           onEdit={(token) => {
             setEditingToken(token)
             setCurrentPage('edit')

@@ -6,6 +6,25 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 
+## [1.3.0] — 2026-09-10
+
+### Added
+
+- 兼容性说明：明确最低 Android 8.0（API 26），全面屏安全区与深色系统栏适配
+  覆盖 Android 15/16；旧 WebView 会在启动时提示更新。
+- HOTP 令牌新增「下一组」按钮推进 counter，不再显示无意义的 30 秒倒计时。
+
+### Fixed
+
+- 原生扫码（相机 Activity）与系统文件选择器会让 WebView 变成 hidden，
+  此前会触发自动上锁，返回后落到锁屏、写入令牌/导入失败。现在这两段时间内
+  暂停自动上锁，操作结束后恢复。
+- 删除令牌增加确认对话框，避免误触直接丢数据。
+- Android SQLite 批量替换改为 `executeSet` 单事务执行，避免「先 DELETE 再逐条
+  INSERT」中途失败时留下空表或半张表。
+- 老款 Android WebView（Chrome < 111）兼容：Tailwind v4 的 `oklch()` 调色板
+  与 `in oklab` 渐变会回退为等值十六进制/纯色，渐变标题不再变成透明。
+
 ## [1.2.2] — 2026-09-10
 
 ### Fixed
@@ -138,4 +157,5 @@ Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
 [1.2.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.0
 [1.2.1]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.1
 [1.2.2]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.2.2
+[1.3.0]: https://github.com/weinotes/7xcircle-authenticator/releases/tag/v1.3.0
 [1.0.0]: https://github.com/weinotes/7xcircle-authenticator
