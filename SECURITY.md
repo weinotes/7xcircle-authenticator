@@ -1,5 +1,7 @@
 # Security Policy
 
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+
 ## What this app guarantees
 
 - No network requests from app code. Enforced by `src/core/privacy.test.ts`.
@@ -24,14 +26,18 @@ Read this before relying on it for high-value accounts.
   nobody can guess from your name, birthday or keyboard row.
 - **No recovery.** A forgotten PIN, or a lost backup password, means the data is
   gone. There is no support channel that can restore it, by design.
-- **Release APKs are unsigned** until a signing key is configured, so they cannot
-  be installed or trusted as authored by this project. See CONTRIBUTING.md.
-- **iOS is unbuilt and untested**; the Xcode project may not exist or compile.
+- **Build provenance.** Only the release APKs attached to this repository's
+  GitHub Releases are signed with the project key. An APK from anywhere else — a
+  fork, a mirror, a messaging app — is not attested by this project; check the
+  source before installing. See CONTRIBUTING.md.
+- **iOS is out of scope for now.** There is no Xcode project, so only the Android
+  and web builds are supported and tested.
 
 ## Reporting a vulnerability
 
-Email **support@7xcircle.com** with `7X Circle Authenticator` in the subject.
-Do not open a public issue.
+Email **support@7xcircle.com** — or the maintainer directly at
+**wgwcko@gmail.com** — with `7X Circle Authenticator` in the subject. Do not open
+a public issue.
 
 - Acknowledgement within 7 days.
 - Fix and disclose within 90 days, or we publish the reason for the delay.
@@ -41,5 +47,6 @@ Do not open a public issue.
 
 | Version | Supported |
 |---|---|
-| 1.1.x | ✅ |
+| 1.2.x | ✅ |
+| 1.1.x | ⚠️ security fixes only |
 | < 1.1 | ❌ end of life |

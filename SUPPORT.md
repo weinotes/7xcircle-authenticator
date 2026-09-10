@@ -1,5 +1,7 @@
 # Support
 
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+
 This is free, open-source software with no service behind it. Support is
 asynchronous and best-effort.
 

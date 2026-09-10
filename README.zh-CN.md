@@ -20,7 +20,7 @@
 | JSON 备份导出 / 导入 | ✅ 口令加密 |
 | PIN 应用锁 + 静态加密 | ✅ 需手动开启 |
 | 切到后台自动重新上锁 | ✅ |
-| iOS 构建 | ❌ 未配置、未验证 |
+| iOS 构建 | ❌ 暂不在范围内（仅 Android 与 Web） |
 | 正式签名 APK | ✅ CI 打 `v*` tag 时自动签名并发布 |
 | 生物识别解锁 | ❌ 未实现 |
 
@@ -55,7 +55,7 @@ npx cap sync android
 npx cap open android   # 或：cd android && ./gradlew assembleDebug
 ```
 
-需要 JDK 21 与含 `platforms;android-36` 的 Android SDK。CI 执行同样的步骤，见 `.github/workflows/build-apk.yml`。
+需要 JDK 21 与含 `platforms;android-36` 的 Android SDK。CI 执行同样的步骤，见 `.github/workflows/ci.yml`。
 
 ## 目录结构
 
@@ -80,4 +80,5 @@ src/
 
 Apache-2.0，详见 [LICENSE](LICENSE)。
 
-Copyright 2026 Davey Wong / 7X Circle.
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+Copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle.

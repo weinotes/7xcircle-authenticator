@@ -1,4 +1,13 @@
 /**
+ * 7X Circle Authenticator — app-lock state machine: PIN policy, unlock, cooldown
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
+/**
  * App lock: PIN-derived key held only in this module's memory.
  *
  * Threat model, stated honestly:

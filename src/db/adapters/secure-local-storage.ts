@@ -1,4 +1,13 @@
 /**
+ * 7X Circle Authenticator — web storage adapter with optional at-rest encryption
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
+/**
  * localStorage adapter with real at-rest encryption.
  *
  * The previous version derived nothing and stored a random key in the *same*

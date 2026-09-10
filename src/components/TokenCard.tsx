@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — single token row: current code, countdown, copy action
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import { useEffect, useRef, useState } from 'react'
 import { useTOTP } from '../hooks/useTOTP'
 import type { Token } from '../core/types'

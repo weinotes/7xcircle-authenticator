@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — shared domain types (token, lock state, backup envelope)
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 export interface Token {
   id: string
   issuer: string

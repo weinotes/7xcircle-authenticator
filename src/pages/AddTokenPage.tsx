@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — enrol a token by QR scan or by manual entry
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import { useState } from 'react'
 import type { TokenInput } from '../core/types'
 import { parseAccountURI } from '../core/uri-parser'

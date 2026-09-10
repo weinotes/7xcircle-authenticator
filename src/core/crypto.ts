@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — PBKDF2-SHA256 key derivation and AES-256-GCM sealing
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 const ENCRYPTION_ALGORITHM = 'AES-GCM'
 const KEY_LENGTH = 256
 const IV_LENGTH = 12

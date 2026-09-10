@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — edit or delete an existing token
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import { useState, useEffect } from 'react'
 import type { Token, TokenInput } from '../core/types'
 import { isValidSecret } from '../core/totp'

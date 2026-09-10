@@ -1,5 +1,7 @@
 # Contributing
 
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+
 Thanks for taking the time. This is a small, single-maintainer project, so the
 barrier to a useful contribution is low.
 
@@ -52,19 +54,28 @@ zero-legacy-identifier test lists every remaining hit.
 2. `pnpm test && pnpm build`, then commit and tag `vX.Y.Z`.
 3. Pushing the tag runs CI, which publishes debug and release APKs.
 
-**The release APK is currently unsigned.** To sign it, add a keystore and wire it
-through Gradle properties rather than committing secrets:
+**How the release APK is signed.** `android/app/build.gradle` switches on
+`signingConfigs.release` only while all four signing variables are present, so the
+key itself never enters the repository. CI injects them from repository secrets:
+
+| Secret | Purpose |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | the keystore, base64-encoded, decoded to a temp file |
+| `ANDROID_KEYSTORE_PASSWORD` | keystore password |
+| `ANDROID_KEY_ALIAS` | key alias inside the keystore |
+| `ANDROID_KEY_PASSWORD` | key password |
+
+Pushing a `v*` tag makes CI export `ANDROID_KEYSTORE_FILE` plus the three other
+variables, so the published `*-release.apk` is signed with the project key. The
+debug APK is debug-signed on every build.
+
+A fork without those secrets still builds — its release APK is simply unsigned.
+To sign your own, create a keystore and set the four variables:
 
 ```bash
 keytool -genkeypair -v -keystore release.jks -alias 7xcircle -keyalg RSA \
   -keysize 2048 -validity 10000
 ```
-
-Then store `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`
-and `RELEASE_KEY_PASSWORD` as CI secrets, read them in
-`android/app/build.gradle` into a `signingConfigs.release` block, and set
-`signingConfig` on the `release` build type. Keep the debug fallback so forks
-without secrets still build.
 
 ## Pull requests
 

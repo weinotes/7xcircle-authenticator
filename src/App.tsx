@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — root component: view routing, app-lock gate and auto re-lock
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import { useEffect, useState } from 'react'
 import { useAppStore } from './store/app-store'
 import { BRAND } from './core/brand'

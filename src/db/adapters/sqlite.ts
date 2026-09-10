@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — native SQLite storage adapter (Capacitor)
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import { Capacitor } from '@capacitor/core'
 import { CapacitorSQLite } from '@capacitor-community/sqlite'
 import type { Token } from '../../core/types'

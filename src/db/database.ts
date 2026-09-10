@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — storage facade that selects the native or the web adapter
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import type { Token } from '../core/types'
 import type { DatabaseAdapter } from './adapters/adapter'
 import { SecureLocalStorageAdapter } from './adapters/secure-local-storage'

@@ -1,5 +1,7 @@
 # Code of Conduct
 
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+
 Adapted from the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) 2.1.
 
 ## Our standard
@@ -18,9 +20,10 @@ Specifically:
 
 ## Reporting
 
-Email **support@7xcircle.com** with `Code of Conduct` in the subject. Reports are
-reviewed by the maintainer; if the report concerns the maintainer, state that and
-it will be handled by a contributor you name.
+Email **support@7xcircle.com**, or the maintainer directly at
+**wgwcko@gmail.com**, with `Code of Conduct` in the subject. Reports are reviewed
+by the maintainer (Davey Wong); if the report concerns the maintainer, state that
+and it will be handled by a contributor you name.
 
 ## Enforcement
 

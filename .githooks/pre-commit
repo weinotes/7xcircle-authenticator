@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+#
+# 7X Circle Authenticator — pre-commit gate (WORK_CONVENTIONS §1.2 / §24.3).
+# Six cheap checks, fastest first. Bypass a false positive with:
+#     git commit --no-verify
+#
+# Check 6 runs the unit suite; it takes ~10s because the app-lock tests do real
+# PBKDF2 work. CI re-runs everything, so --no-verify is safe for a WIP commit.
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR || true)
+if [ -z "$staged" ]; then
+  exit 0
+fi
+
+fail() { printf '\n%s\n' "$1" >&2; exit 1; }
+
+# 1 — credentials and secrets ------------------------------------------------
+echo '=== 1/6 credentials ==='
+if git diff --cached -U0 -- ':!.githooks' | grep -nE '^\+.*(BEGIN [A-Z ]*PRIVATE KEY|AKIA[0-9A-Z]{16}|api[_-]?key[[:space:]]*[:=]|secret[[:space:]]*[:=]|passphrase[[:space:]]*[:=]|password[[:space:]]*[:=][[:space:]]*["'"'"']?[^"'"'"'[:space:]]+)'; then
+  fail 'FAIL: staged diff looks like a credential. Unstage it (or --no-verify).'
+fi
+
+# 2 — signing material -------------------------------------------------------
+echo '=== 2/6 signing material ==='
+if printf '%s\n' "$staged" | grep -qE '\.(jks|keystore|p12|key|p8|mobileprovision)$'; then
+  fail 'FAIL: a keystore / signing key must never be committed.'
+fi
+
+# 3 — type check -------------------------------------------------------------
+echo '=== 3/6 type check ==='
+pnpm --silent type-check
+
+# 4 — debug leftovers and TODO markers --------------------------------------
+echo '=== 4/6 debug leftovers ==='
+# Fragments again, so this hook cannot match its own lines in a diff.
+debug="$(printf '%s|%s|%s|%s|%s' 'debug''ger' 'console\.log\(' 'pdb\.set_''trace' 'break''point\(\)' '(it|describe|test)\.on''ly\(')"
+if git diff --cached -U0 -- ':!.githooks' | grep -nE "^\+.*(${debug})"; then
+  fail 'FAIL: debug statement in staged code.'
+fi
+todo="$(printf '%s|%s' 'TO''DO' 'FIX''ME')"
+git diff --cached -U0 -- ':!.githooks' | grep -nE "^\+.*(${todo})" || true   # report only
+
+# 5 — legacy brand identifiers ----------------------------------------------
+echo '=== 5/6 legacy brand identifiers ==='
+scanned=$(printf '%s\n' "$staged" | grep -E '^(src/|android/app/src/main/java/|\.github/|package\.json|index\.html|capacitor\.config\.ts|android/app/build\.gradle|android/app/src/main/res/values/strings\.xml)' || true)
+if [ -n "$scanned" ]; then
+  # Fragments keep this hook from matching its own pattern.
+  legacy="$(printf '%s|%s|%s' 'jue''zhao' '觉''照' '绝''招')"
+  if printf '%s\n' "$scanned" | xargs grep -lE "$legacy" 2>/dev/null; then
+    fail 'FAIL: legacy brand identifier in a scanned file (see src/core/brand.test.ts).'
+  fi
+fi
+
+# 6 — unit tests -------------------------------------------------------------
+echo '=== 6/6 unit tests ==='
+pnpm --silent test
+
+if [ "$(git symbolic-ref --short HEAD 2>/dev/null || echo '')" = 'main' ]; then
+  echo 'note: committing directly to main (WORK_CONVENTIONS §10.5.2 prefers feat/* + PR).'
+fi
+
+echo 'pre-commit: ok'

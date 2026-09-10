@@ -1,4 +1,13 @@
 /**
+ * 7X Circle Authenticator — single source of truth for brand identity
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
+/**
  * Single source of truth for brand identity.
  *
  * Every user-visible name, storage key prefix and contact address must be

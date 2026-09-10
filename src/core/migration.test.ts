@@ -1,3 +1,12 @@
+/**
+ * 7X Circle Authenticator — tests for the otpauth-migration:// parser
+ *
+ * @author Davey Wong <wgwcko@gmail.com>
+ * @copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle
+ * @license SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. See LICENSE.
+ */
 import { describe, expect, it } from 'vitest'
 import * as OTPAuth from 'otpauth'
 import { parseMigrationURI } from './migration'

@@ -1,8 +1,11 @@
 name: CI
 
 on:
+  # WORK_CONVENTIONS §10.5.4: gate every branch, not just main. The `quality`
+  # job is a few seconds of type check, lint and unit tests, so the cost of
+  # covering feature branches is negligible; `apk` only runs after it passes.
   push:
-    branches: [main, master]
+    branches: ['**']
     tags: ['v*']
   pull_request:
     branches: [main, master]

@@ -20,7 +20,7 @@ Offline TOTP / HOTP two-factor authenticator for the [7X Circle](https://7xcircl
 | JSON backup export / import | ✅ password-encrypted |
 | PIN app lock with at-rest encryption | ✅ opt-in |
 | Auto re-lock when backgrounded | ✅ |
-| iOS build | ❌ not configured or tested |
+| iOS build | ❌ out of scope for now (Android and web only) |
 | Release-signed APK | ✅ auto-signed by CI when a `v*` tag is pushed |
 | Biometric unlock | ❌ not implemented |
 
@@ -55,7 +55,7 @@ npx cap sync android
 npx cap open android   # or: cd android && ./gradlew assembleDebug
 ```
 
-Needs a JDK 21 and an Android SDK with `platforms;android-36`. CI builds the same steps — see `.github/workflows/build-apk.yml`.
+Needs a JDK 21 and an Android SDK with `platforms;android-36`. CI builds the same steps — see `.github/workflows/ci.yml`.
 
 ## Project layout
 
@@ -81,4 +81,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities via [SECURITY.md]
 
 Apache-2.0 — see [LICENSE](LICENSE).
 
-Copyright 2026 Davey Wong / 7X Circle.
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+Copyright 2026 Davey Wong <wgwcko@gmail.com> / 7X Circle.

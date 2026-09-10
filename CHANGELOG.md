@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+Author: Davey Wong <wgwcko@gmail.com> (https://www.guangweiblog.com)
+
 ## [1.2.1] — 2026-09-10
 
 ### Fixed
@@ -19,6 +21,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - 设置页增加「检查更新 / 下载新版本」入口和版权信息
   （© 2026 Davey Wong / 7X Circle · Apache-2.0）。
 - 首页标题下移并增大与状态栏/列表的间距。
+
+### Changed
+
+- 开源合规（WORK_CONVENTIONS 第十章）：全部源文件补 Apache-2.0 版权头与作者署名，
+  `LICENSE` 与各文档补规范作者行，新增 `PATENTS.md` 与 `.githooks/pre-commit`；
+  CI 工作流更名 `.github/workflows/ci.yml`；`vitest` 增加环境引导，
+  修掉 Node 22+ 实验性全局 `localStorage` 遮蔽 jsdom 导致本机测试假失败的问题；
+  文档同步修正「release APK 未签名」等与实现不符的旧描述。
 
 ## [1.2.0] — 2026-09-10
 

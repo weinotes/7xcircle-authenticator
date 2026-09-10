@@ -30,3 +30,15 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*.local
+
+# Signing material — a keystore or key must never be committed
+*.jks
+*.keystore
+*.p12
+*.key
+*.p8
+*.mobileprovision
+
+# Test coverage
+coverage/
+
