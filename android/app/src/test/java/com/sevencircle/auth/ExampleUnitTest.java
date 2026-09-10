@@ -1,4 +1,4 @@
-package com.getcapacitor.myapp;
+package com.sevencircle.auth;
 
 import static org.junit.Assert.*;
 

@@ -7,7 +7,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. See LICENSE.
  */
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { BRAND, storageKey } from './brand'
@@ -37,6 +37,8 @@ const SCANNED_FILES = [
 ]
 
 function walk(dir: string): string[] {
+  // Tolerate a tree that is not present (e.g. a fresh clone without android/).
+  if (!existsSync(join(root, dir))) return []
   return readdirSync(join(root, dir), { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name)
     return entry.isDirectory() ? walk(path) : [path]
@@ -69,6 +71,17 @@ describe('brand constants', () => {
 })
 
 describe('rename completeness', () => {
+  it('keeps every Android source under the branded package', () => {
+    // `npx cap add android` scaffolds com.getcapacitor.myapp; the app's own
+    // sources (and the package its instrumented test asserts) must be the
+    // branded applicationId, so a re-scaffold cannot silently reintroduce it.
+    const files = ['android/app/src/main/java', 'android/app/src/androidTest', 'android/app/src/test'].flatMap(walk)
+    const offenders = files.filter((file) =>
+      readFileSync(join(root, file), 'utf8').includes(`${'com.getcapacitor'}.${'myapp'}`),
+    )
+    expect(offenders).toEqual([])
+  })
+
   it('leaves no legacy brand identifier in source, config or CI', () => {
     const files = [...SCANNED_DIRS.flatMap(walk), ...SCANNED_FILES]
     const offenders = files.filter((file) => LEGACY.test(readFileSync(join(root, file), 'utf8')))
