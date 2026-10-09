@@ -44,14 +44,16 @@ python3 -m http.server 8781 --directory download   # 打开 http://127.0.0.1:878
 
 ## 部署（三选一）
 
-1. **Cloudflare Pages**（已上线）
-   - 项目：`7xcircle-authenticator`，生产分支 `main`，地址 <https://7xcircle-authenticator.pages.dev>
-   - 直接上传：在**仓库外**的目录执行，避免 wrangler 的 autoconfig 改动仓库文件：
+1. **Cloudflare Pages**（已上线，Git 自动部署）
+   - 项目：`7xcircle-authenticator`，生产分支 `main`
+   - 已接入 GitHub 源（`weinotes/7xcircle-authenticator`）：**push 到 `main` 即自动构建发布**，
+     构建命令留空、构建输出目录 `download`，一次构建约 30 秒
+   - 线上地址：<https://auth.7xcircle.com>（自定义域名）、<https://7xcircle-authenticator.pages.dev>（默认域名）
+   - 手动兜底（CI 不可用时）：在**仓库外**的目录执行，避免 wrangler 的 autoconfig 改动仓库文件：
      ```bash
      cd /tmp && npx wrangler pages deploy "<仓库绝对路径>/download" \
        --project-name=7xcircle-authenticator --branch=main
      ```
-   - Git 集成：Dashboard → Workers & Pages → 连接该仓库，构建命令留空，构建输出目录填 `download`。
 2. **静态托管 / VPS**：把 `download/` 整个目录作为站点根目录发布即可，无需 Node 运行时。
 3. **GitHub Pages**：新建 Pages 站点指向本目录（大陆访问较慢，适合作为备用入口）。
 
