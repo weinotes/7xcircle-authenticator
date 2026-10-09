@@ -27,7 +27,9 @@ const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as {
  */
 const LEGACY = new RegExp(`${'jue'}${'zhao'}|${'觉'}${'照'}|${'绝'}${'招'}`, 'i')
 
-const SCANNED_DIRS = ['src', 'android/app/src/main/java', '.github/workflows']
+// `download` is the standalone APK download page: it ships brand strings and
+// release links to the public, so it is scanned like every other source tree.
+const SCANNED_DIRS = ['src', 'download', 'android/app/src/main/java', '.github/workflows']
 const SCANNED_FILES = [
   'package.json',
   'index.html',
@@ -86,5 +88,37 @@ describe('rename completeness', () => {
     const files = [...SCANNED_DIRS.flatMap(walk), ...SCANNED_FILES]
     const offenders = files.filter((file) => LEGACY.test(readFileSync(join(root, file), 'utf8')))
     expect(offenders).toEqual([])
+  })
+})
+
+/**
+ * The download page is the public entry point for the APK, so a stale version
+ * or a broken mirror link there is worse than a broken build: users would
+ * download an old binary that looks current. Assert it against BRAND instead
+ * of trusting whoever bumps the release to remember.
+ */
+describe('download page', () => {
+  const pagePath = join(root, 'download/index.html')
+
+  it('exists with its icon asset', () => {
+    expect(existsSync(pagePath)).toBe(true)
+    expect(existsSync(join(root, 'download/app-icon.png'))).toBe(true)
+  })
+
+  it('advertises the release version from package.json', () => {
+    expect(readFileSync(pagePath, 'utf8')).toContain(`v${BRAND.version}`)
+  })
+
+  it('links the signed APK on both channels for the current release', () => {
+    const page = readFileSync(pagePath, 'utf8')
+    expect(page).toContain(`${BRAND.releasesUrl}/latest/download/app-release.apk`)
+    expect(page).toContain(
+      `https://gitee.com/weinotes/${BRAND.slug}/releases/download/v${BRAND.version}/app-release.apk`,
+    )
+  })
+
+  it('publishes a real SHA-256, not a placeholder', () => {
+    const digest = /<code id="sha256">([0-9a-f]+)<\/code>/.exec(readFileSync(pagePath, 'utf8'))?.[1]
+    expect(digest).toMatch(/^[0-9a-f]{64}$/)
   })
 })
