@@ -43,11 +43,15 @@ python3 -m http.server 8781 --directory download   # 打开 http://127.0.0.1:878
 - **`pages project create` 首次需要 `--force`。** 不带 `--force` 时 wrangler 4 会把命令委派给
   新的 Workers 流程并报错；项目已存在后不再需要 `--force`。
 
-### 自定义域名（可选）
+### 自定义域名（已上线）
 
-不必把 7xcircle.com 的 NS 迁到 Cloudflare：同账号的 `7xcircle-web` 项目已用 CNAME 方式绑定了
-`wallet.7xcircle.com`（CNAME → `7xcircle-web.pages.dev`）。同理可在 DNSPod 加一条
-`dl` / `auth` 的 CNAME 指向 `7xcircle-authenticator.pages.dev`，再在 Pages 项目里添加该自定义域名。
+主入口：<https://auth.7xcircle.com>（2026-10-09 起）。
+
+不必把 7xcircle.com 的 NS 迁到 Cloudflare。做法是在 DNSPod 加一条 CNAME
+`auth` → `7xcircle-authenticator.pages.dev`，再在 Pages 项目里添加同名自定义域名；
+CF 以 http 方式自动完成验证并签发证书（Google Trust Services，90 天有效），无需手工传证书。
+添加后 `status` 会先 `pending` 一两分钟，随后 `active`。
+同账号的 `7xcircle-web` 项目用同样方式绑定了 `wallet.7xcircle.com`。
 
 ## 发版时要改什么
 
