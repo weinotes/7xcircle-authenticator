@@ -122,3 +122,59 @@ describe('download page', () => {
     expect(digest).toMatch(/^[0-9a-f]{64}$/)
   })
 })
+
+/**
+ * The page is the public storefront for the APK. If its SEO sidecars go missing
+ * the download still works but the page stops being discoverable, and a
+ * canonical pointing at a host nobody serves is worse than no canonical at all.
+ */
+describe('download page SEO', () => {
+  const pagePath = join(root, 'download/index.html')
+  const page = readFileSync(pagePath, 'utf8')
+
+  it('ships every sidecar at the site root', () => {
+    for (const file of ['og-image.png', 'robots.txt', 'sitemap.xml']) {
+      expect(existsSync(join(root, 'download', file)), file).toBe(true)
+    }
+  })
+
+  it('points canonical, og:url and the sitemap at the same live origin', () => {
+    const origin = 'https://auth.7xcircle.com'
+    expect(page).toContain(`<link rel="canonical" href="${origin}/" />`)
+    expect(page).toContain(`<meta property="og:url" content="${origin}/" />`)
+    expect(page).toContain(`<meta property="og:image" content="${origin}/og-image.png" />`)
+    expect(page).toContain('<meta name="twitter:card" content="summary_large_image" />')
+
+    expect(readFileSync(join(root, 'download/sitemap.xml'), 'utf8')).toContain(
+      `<loc>${origin}/</loc>`,
+    )
+    expect(readFileSync(join(root, 'download/robots.txt'), 'utf8')).toContain(
+      `Sitemap: ${origin}/sitemap.xml`,
+    )
+  })
+
+  it('emits JSON-LD that parses and agrees with the visible copy', () => {
+    const marker = '<script type="application/ld+json">'
+    const blocks = page
+      .split(marker)
+      .slice(1)
+      .map((chunk) => JSON.parse(chunk.slice(0, chunk.indexOf('</script>'))) as Record<string, unknown>)
+    expect(blocks.length).toBeGreaterThanOrEqual(3)
+
+    // A release bump that forgets the structured data would otherwise silently
+    // advertise an old version to search engines.
+    const app = blocks.find((b) => b['@type'] === 'SoftwareApplication')
+    expect(app?.softwareVersion).toBe(BRAND.version)
+
+    // GEO only works when the machine-readable Q&A mirrors what a human reads.
+    const faq = blocks.find((b) => b['@type'] === 'FAQPage') as
+      | { mainEntity: { name: string }[] }
+      | undefined
+    const visible = page
+      .split('<article class="faq-item">')
+      .slice(1)
+      .map((chunk) => chunk.slice(chunk.indexOf('<h3>') + 4, chunk.indexOf('</h3>')).trim())
+    expect(visible.length).toBeGreaterThan(0)
+    expect(faq?.mainEntity.map((q) => q.name)).toEqual(visible)
+  })
+})

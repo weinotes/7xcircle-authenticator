@@ -1,0 +1,5 @@
+# 7X Circle 验证器 — Android APK 下载页
+User-agent: *
+Allow: /
+
+Sitemap: https://auth.7xcircle.com/sitemap.xml

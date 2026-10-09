@@ -12,9 +12,29 @@
 
 | 文件 | 说明 |
 |---|---|
-| `index.html` | 页面本体：下载按钮（GitHub 主站 / Gitee 国内镜像）、安装步骤、SHA-256 校验、兼容性、安全说明、版本与源码 |
+| `index.html` | 页面本体：下载按钮（GitHub 主站 / Gitee 国内镜像）、安装步骤、SHA-256 校验、兼容性、安全说明、常见问题、版本与源码 |
 | `app-icon.png` | 应用图标（与 `public/icon.png` 同一张） |
 | `favicon.png` | 站点图标（与 `public/favicon.png` 同一张） |
+| `og-image.png` | 社交分享大图 1200×630，由 `scripts/generate-og-image.py` 生成 |
+| `robots.txt` | 允许全站抓取并指向 sitemap |
+| `sitemap.xml` | 单页 sitemap，canonical 为 <https://auth.7xcircle.com/> |
+
+## SEO / GEO
+
+页面面向两套检索系统做优化：
+
+- **传统搜索**：唯一 `<title>`、description、keywords、canonical、Open Graph、Twitter Card（`summary_large_image`）。
+- **生成式检索（GEO）**：三段 JSON-LD —— `SoftwareApplication`（含 `offers.price=0`、`featureList`、`author`）、`WebSite`、`FAQPage`；FAQ 的可见内容与 `FAQPage` 一一对应，机器可读的答案与页面上人能看到的一致。
+
+`src/core/brand.test.ts` 的 `download page SEO` 断言会校验：三个旁挂文件存在、canonical / `og:url` / sitemap / robots 指向同一域名、每段 JSON-LD 能被解析、`softwareVersion` 等于 `package.json` 版本、`FAQPage` 的问题列表与页面上的 `<article class="faq-item">` 完全一致。
+
+改了 FAQ 的可见文案就要同步改 `FAQPage`，否则测试会失败 —— 这是刻意的。
+
+重新生成分享图：
+
+```bash
+python3 scripts/generate-og-image.py   # 需要 Pillow
+```
 
 ## 本地预览
 

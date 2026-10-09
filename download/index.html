@@ -17,13 +17,46 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
-    <title>下载 7X Circle 验证器 · Android APK</title>
+    <title>7X Circle 验证器 — 离线 TOTP/HOTP 双因素验证器（Android APK 下载）</title>
     <meta
       name="description"
-      content="7X Circle 验证器（7X Circle Authenticator）Android 正式签名 APK 下载。离线 TOTP/HOTP 双因素验证器，不联网、无账号、开源 Apache-2.0。"
+      content="7X Circle 验证器（7X Circle Authenticator）是面向 7X Circle 会员的离线 TOTP/HOTP 双因素验证器，令牌全部在本机计算，不联网、无账号、无埋点。提供 Android 8.0+ 正式签名 APK 下载与 SHA-256 校验，Apache-2.0 开源。"
     />
+    <meta
+      name="keywords"
+      content="TOTP, HOTP, 双因素验证器, 两步验证, 2FA, 谷歌验证器迁移, otpauth, 7X Circle, 验证器 APK 下载, 离线验证器"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0f1729" />
     <meta name="app-version" content="v1.4.0" />
+    <link rel="canonical" href="https://auth.7xcircle.com/" />
     <link rel="icon" href="./favicon.png" />
+    <link rel="apple-touch-icon" href="./app-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="7X Circle 验证器" />
+    <meta property="og:url" content="https://auth.7xcircle.com/" />
+    <meta property="og:title" content="7X Circle 验证器 — 离线 TOTP/HOTP 双因素验证器" />
+    <meta
+      property="og:description"
+      content="令牌全部在本机计算，应用不发起任何网络请求，无需账号。Android 8.0+ 正式签名 APK 下载，Apache-2.0 开源。"
+    />
+    <meta property="og:image" content="https://auth.7xcircle.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="7X Circle 验证器 —— 离线 TOTP/HOTP 双因素验证器" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="7X Circle 验证器 — 离线 TOTP/HOTP 双因素验证器" />
+    <meta
+      name="twitter:description"
+      content="令牌全部在本机计算，不联网、无账号。Android 正式签名 APK 下载，Apache-2.0 开源。"
+    />
+    <meta name="twitter:image" content="https://auth.7xcircle.com/og-image.png" />
     <style>
       :root {
         --bg: #0f1729;
@@ -413,6 +446,29 @@
         color: var(--muted);
       }
 
+      /* ---------- FAQ ---------- */
+
+      .faq {
+        margin-top: 14px;
+      }
+
+      .faq-item + .faq-item {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      .faq-item h3 {
+        font-size: 14.5px;
+        color: var(--text);
+      }
+
+      .faq-item p {
+        margin-top: 6px;
+        font-size: 13.5px;
+        color: #cbd5e1;
+      }
+
       @media (max-width: 520px) {
         .hero {
           padding-top: 36px;
@@ -426,6 +482,121 @@
         }
       }
     </style>
+
+    <!-- Structured data: consumed by Google/Bing rich results and, more
+         importantly, by LLM search engines (ChatGPT Search, Perplexity) that
+         extract SoftwareApplication + FAQPage to answer "best offline TOTP
+         authenticator" style queries. Kept in sync with the visible copy. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "7X Circle 验证器",
+        "alternateName": "7X Circle Authenticator",
+        "url": "https://auth.7xcircle.com/",
+        "downloadUrl": "https://github.com/weinotes/7xcircle-authenticator/releases/latest/download/app-release.apk",
+        "applicationCategory": "SecurityApplication",
+        "applicationSubCategory": "Two-factor authentication",
+        "operatingSystem": "Android 8.0+",
+        "softwareVersion": "1.4.0",
+        "softwareRequirements": "Android 8.0（API 26）及以上；网页版需最新版 Chrome / Edge / Safari",
+        "inLanguage": ["zh-CN", "en"],
+        "isAccessibleForFree": true,
+        "license": "https://www.apache.org/licenses/LICENSE-2.0",
+        "description": "面向 7X Circle 会员的离线 TOTP/HOTP 双因素验证器。支持 RFC 6238 / RFC 4226，SHA1 / SHA256 / SHA512、6/7/8 位、自定义周期；令牌全部在本机计算，应用不发起任何网络请求。提供 Android 8.0+ 正式签名 APK 与 web 版。",
+        "featureList": [
+          "TOTP (RFC 6238) 与 HOTP (RFC 4226)",
+          "SHA1 / SHA256 / SHA512，6 / 7 / 8 位，自定义周期",
+          "扫码添加与 otpauth-migration:// 多账号导入",
+          "JSON 加密备份导出与导入",
+          "可选 PIN 应用锁（AES-256-GCM）"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "Davey Wong",
+          "email": "wgwcko@gmail.com",
+          "url": "https://www.guangweiblog.com"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "CNY",
+          "description": "免费下载，Apache-2.0 开源"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "7X Circle 验证器",
+        "alternateName": "7X Circle Authenticator",
+        "url": "https://auth.7xcircle.com/",
+        "inLanguage": ["zh-CN", "en"],
+        "publisher": {
+          "@type": "Organization",
+          "name": "7X Circle",
+          "url": "https://7xcircle.com"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "zh-CN",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "7X Circle 验证器需要联网吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "不需要。应用代码不含任何网络请求，TOTP / HOTP 令牌全部在本机计算；这一约束由仓库内的自动化测试断言，而不是口头声明。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "忘记应用锁 PIN 怎么办？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "无法找回，也没有后门。只能用在开启应用锁之前导出的加密备份恢复，因此建议在开启应用锁前先导出一份加密备份。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "支持 iOS 吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "暂不支持。目前提供 Android 8.0+ 的原生应用与网页版，iOS 尚未配置或测试。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "令牌密钥存在哪里？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "全部存在本机：原生端为 SQLite 数据库，网页端为 localStorage。开启应用锁后密钥以 AES-256-GCM 加密，加密密钥由 PIN 经 PBKDF2-SHA256（600,000 轮）派生且仅存在于内存中。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "怎么确认下载到的是正式版本？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "用 SHA-256 校验。本页给出了 app-release.apk 的 SHA-256，下载后本地复算比对，两者一致即说明文件与发布时完全相同。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "可以导入 Google Authenticator 的令牌吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "可以。支持扫描 otpauth-migration:// 转移二维码，一次导入多个账号。"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div class="wrap">
@@ -487,6 +658,7 @@
         </p>
       </header>
 
+      <main>
       <section class="card">
         <h2>安装步骤</h2>
         <ol>
@@ -598,6 +770,36 @@
         </table>
       </section>
 
+      <section class="card" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">常见问题</h2>
+        <div class="faq">
+          <article class="faq-item">
+            <h3>7X Circle 验证器需要联网吗？</h3>
+            <p>不需要。应用代码不含任何网络请求，TOTP / HOTP 令牌全部在本机计算；这一约束由仓库内的自动化测试断言，而不是口头声明。</p>
+          </article>
+          <article class="faq-item">
+            <h3>忘记应用锁 PIN 怎么办？</h3>
+            <p>无法找回，也没有后门。只能用在开启应用锁之前导出的加密备份恢复，因此建议在开启应用锁前先导出一份加密备份。</p>
+          </article>
+          <article class="faq-item">
+            <h3>支持 iOS 吗？</h3>
+            <p>暂不支持。目前提供 Android 8.0+ 的原生应用与网页版，iOS 尚未配置或测试。</p>
+          </article>
+          <article class="faq-item">
+            <h3>令牌密钥存在哪里？</h3>
+            <p>全部存在本机：原生端为 SQLite 数据库，网页端为 localStorage。开启应用锁后密钥以 AES-256-GCM 加密，加密密钥由 PIN 经 PBKDF2-SHA256（600,000 轮）派生且仅存在于内存中。</p>
+          </article>
+          <article class="faq-item">
+            <h3>怎么确认下载到的是正式版本？</h3>
+            <p>用 SHA-256 校验。本页给出了 <code>app-release.apk</code> 的 SHA-256，下载后本地复算比对，两者一致即说明文件与发布时完全相同。</p>
+          </article>
+          <article class="faq-item">
+            <h3>可以导入 Google Authenticator 的令牌吗？</h3>
+            <p>可以。支持扫描 <code>otpauth-migration://</code> 转移二维码，一次导入多个账号。</p>
+          </article>
+        </div>
+      </section>
+
       <section class="card" lang="en">
         <h2>English</h2>
         <p>
@@ -607,6 +809,7 @@
           and requires Android 8.0+. Verify the SHA-256 above against the file you downloaded.
         </p>
       </section>
+      </main>
 
       <footer>
         <div>
