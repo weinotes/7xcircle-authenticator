@@ -24,9 +24,30 @@ python3 -m http.server 8781 --directory download   # 打开 http://127.0.0.1:878
 
 ## 部署（三选一）
 
-1. **Cloudflare Pages**（海外快、大陆可直连）：新建 Pages 项目，构建命令留空，构建输出目录填 `download`。
+1. **Cloudflare Pages**（已上线）
+   - 项目：`7xcircle-authenticator`，生产分支 `main`，地址 <https://7xcircle-authenticator.pages.dev>
+   - 直接上传：在**仓库外**的目录执行，避免 wrangler 的 autoconfig 改动仓库文件：
+     ```bash
+     cd /tmp && npx wrangler pages deploy "<仓库绝对路径>/download" \
+       --project-name=7xcircle-authenticator --branch=main
+     ```
+   - Git 集成：Dashboard → Workers & Pages → 连接该仓库，构建命令留空，构建输出目录填 `download`。
 2. **静态托管 / VPS**：把 `download/` 整个目录作为站点根目录发布即可，无需 Node 运行时。
 3. **GitHub Pages**：新建 Pages 站点指向本目录（大陆访问较慢，适合作为备用入口）。
+
+### Cloudflare 部署的两个坑
+
+- **必须在仓库外目录执行。** wrangler 4 的 autoconfig 会探测到本仓库的 Vite 工程，然后改写
+  `package.json`（加 wrangler 依赖）、`vite.config.ts`、`pnpm-lock.yaml`、`pnpm-workspace.yaml`。
+  从仓库内跑过一次就会留下这些改动，需要手动 `git restore`。
+- **`pages project create` 首次需要 `--force`。** 不带 `--force` 时 wrangler 4 会把命令委派给
+  新的 Workers 流程并报错；项目已存在后不再需要 `--force`。
+
+### 自定义域名（可选）
+
+不必把 7xcircle.com 的 NS 迁到 Cloudflare：同账号的 `7xcircle-web` 项目已用 CNAME 方式绑定了
+`wallet.7xcircle.com`（CNAME → `7xcircle-web.pages.dev`）。同理可在 DNSPod 加一条
+`dl` / `auth` 的 CNAME 指向 `7xcircle-authenticator.pages.dev`，再在 Pages 项目里添加该自定义域名。
 
 ## 发版时要改什么
 
